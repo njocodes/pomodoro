@@ -48,25 +48,31 @@ export function useTimer() {
 
   // Handle timer completion
   const handleTimerComplete = useCallback(() => {
-    updateTimerState({ isRunning: false });
-    
-    if (timerState.mode === 'work') {
-      const newPomodoroCount = timerState.pomodoroCount + 1;
-      const newMode = newPomodoroCount % 4 === 0 ? 'longBreak' : 'shortBreak';
-      const newTimeLeft = newMode === 'longBreak' ? timerState.longBreak * 60 : timerState.shortBreak * 60;
-      
-      updateTimerState({
-        pomodoroCount: newPomodoroCount,
-        mode: newMode,
-        timeLeft: newTimeLeft
-      });
-    } else {
-      updateTimerState({
-        mode: 'work',
-        timeLeft: timerState.workTime * 60
-      });
-    }
-  }, [timerState, updateTimerState]);
+    setTimerState(prev => {
+      if (prev.mode === 'work') {
+        const newPomodoroCount = prev.pomodoroCount + 1;
+        const newMode = newPomodoroCount % 4 === 0 ? 'longBreak' : 'shortBreak';
+        const newTimeLeft = newMode === 'longBreak' ? prev.longBreak * 60 : prev.shortBreak * 60;
+        
+        return {
+          ...prev,
+          isRunning: false,
+          pomodoroCount: newPomodoroCount,
+          mode: newMode,
+          timeLeft: newTimeLeft,
+          lastUpdate: Date.now()
+        };
+      } else {
+        return {
+          ...prev,
+          isRunning: false,
+          mode: 'work',
+          timeLeft: prev.workTime * 60,
+          lastUpdate: Date.now()
+        };
+      }
+    });
+  }, []);
 
   // Timer logic
   useEffect(() => {
@@ -77,7 +83,8 @@ export function useTimer() {
           const newTimeLeft = Math.max(0, prev.timeLeft - elapsed);
           
           if (newTimeLeft <= 0) {
-            // Timer finished - will be handled by handleTimerComplete
+            // Timer finished - trigger completion
+            handleTimerComplete();
             return {
               ...prev,
               timeLeft: 0,
