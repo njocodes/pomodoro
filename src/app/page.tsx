@@ -5,6 +5,7 @@ import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import EdgeProgressBar from '@/components/EdgeProgressBar';
 import MobileModeDropdown from '@/components/MobileModeDropdown';
+import LeftModeDropdown from '@/components/LeftModeDropdown';
 import CornerDropdown from '@/components/CornerDropdown';
 import SettingsModal from '@/components/SettingsModal';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -196,15 +197,7 @@ export default function Home() {
         </p>
         
         {/* Mode selector */}
-        {isMobile ? (
-          <div className="flex justify-center mb-6">
-            <MobileModeDropdown 
-              mode={mode} 
-              onModeChange={switchMode} 
-              theme={theme} 
-            />
-          </div>
-        ) : (
+        {!isMobile && (
           <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">
             <button
               onClick={() => switchMode('work')}
@@ -345,13 +338,20 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mobile Corner Dropdown */}
+      {/* Mobile Dropdowns */}
       {isMobile && (
-        <CornerDropdown 
-          onReset={resetTimer}
-          onSettings={() => setShowSettings(true)}
-          theme={theme}
-        />
+        <>
+          <LeftModeDropdown 
+            mode={mode} 
+            onModeChange={switchMode} 
+            theme={theme} 
+          />
+          <CornerDropdown 
+            onReset={resetTimer}
+            onSettings={() => setShowSettings(true)}
+            theme={theme}
+          />
+        </>
       )}
 
       <SettingsModal
