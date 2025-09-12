@@ -26,7 +26,12 @@ export default function SettingsModal({
   const [localLongBreak, setLocalLongBreak] = useState(longBreak);
 
   const handleSave = () => {
-    onSave(localWorkTime, localShortBreak, localLongBreak);
+    // Use default values if fields are empty or 0
+    const workTime = localWorkTime || 25;
+    const shortBreak = localShortBreak || 5;
+    const longBreak = localLongBreak || 15;
+    
+    onSave(workTime, shortBreak, longBreak);
     onClose();
   };
 
@@ -81,7 +86,17 @@ export default function SettingsModal({
               min="1"
               max="60"
               value={localWorkTime}
-              onChange={(e) => setLocalWorkTime(parseInt(e.target.value) || 25)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
+                  setLocalWorkTime(0);
+                } else {
+                  const numValue = parseInt(value);
+                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 60) {
+                    setLocalWorkTime(numValue);
+                  }
+                }
+              }}
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
@@ -102,7 +117,17 @@ export default function SettingsModal({
               min="1"
               max="30"
               value={localShortBreak}
-              onChange={(e) => setLocalShortBreak(parseInt(e.target.value) || 5)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
+                  setLocalShortBreak(0);
+                } else {
+                  const numValue = parseInt(value);
+                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 30) {
+                    setLocalShortBreak(numValue);
+                  }
+                }
+              }}
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
@@ -123,7 +148,17 @@ export default function SettingsModal({
               min="1"
               max="60"
               value={localLongBreak}
-              onChange={(e) => setLocalLongBreak(parseInt(e.target.value) || 15)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
+                  setLocalLongBreak(0);
+                } else {
+                  const numValue = parseInt(value);
+                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 60) {
+                    setLocalLongBreak(numValue);
+                  }
+                }
+              }}
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
