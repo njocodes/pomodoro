@@ -21,9 +21,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
       // Find which digits changed
       const changedDigits = new Set<string>();
       
-      // Check minutes
-      const oldMinDigits = oldMinutes.split('');
-      const newMinDigits = newMinutes.split('');
+      // Check minutes - pad with leading zeros for comparison
+      const oldMinDigits = oldMinutes.padStart(2, '0').split('');
+      const newMinDigits = newMinutes.padStart(2, '0').split('');
       for (let i = 0; i < Math.max(oldMinDigits.length, newMinDigits.length); i++) {
         const oldDigit = oldMinDigits[i] || '0';
         const newDigit = newMinDigits[i] || '0';
@@ -32,10 +32,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         }
       }
       
-      // Check seconds
-      const oldSecDigits = oldSeconds.split('');
-      const newSecDigits = newSeconds.split(':');
-      for (let i = 0; i < Math.max(oldSecDigits.length, newSecDigits.length); i++) {
+      // Check seconds - always 2 digits
+      const oldSecDigits = oldSeconds.padStart(2, '0').split('');
+      const newSecDigits = newSeconds.padStart(2, '0').split('');
+      for (let i = 0; i < 2; i++) {
         const oldDigit = oldSecDigits[i] || '0';
         const newDigit = newSecDigits[i] || '0';
         if (oldDigit !== newDigit) {
@@ -64,8 +64,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const [minutes, seconds] = timeString.split(':');
   
   // Split minutes and seconds into individual digits
-  const minuteDigits = minutes.split('');
-  const secondDigits = seconds.split('');
+  // Pad minutes to 2 digits for consistent display
+  const minuteDigits = minutes.padStart(2, '0').split('');
+  const secondDigits = seconds.padStart(2, '0').split('');
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping }: { digit: string; keyPrefix: string; isFlipping: boolean }) => {
     return (

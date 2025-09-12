@@ -79,7 +79,7 @@ export default function Home() {
         <h1 className={`text-5xl font-bold mb-2 ${
           theme === 'light'
             ? 'text-gray-900'
-            : 'bg-gradient-to-r from-red-400 via-pink-500 to-purple-600 bg-clip-text text-transparent'
+            : 'text-white'
         }`}>
           Pomodoro Timer
         </h1>
@@ -97,7 +97,7 @@ export default function Home() {
               mode === 'work' 
                 ? theme === 'light'
                   ? 'bg-gray-900 text-white shadow-gray-900/25'
-                  : 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/25'
+                  : 'bg-gray-600 text-white shadow-gray-600/25'
                 : theme === 'light'
                   ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
@@ -111,7 +111,7 @@ export default function Home() {
               mode === 'shortBreak' 
                 ? theme === 'light'
                   ? 'bg-gray-900 text-white shadow-gray-900/25'
-                  : 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-green-500/25'
+                  : 'bg-gray-600 text-white shadow-gray-600/25'
                 : theme === 'light'
                   ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
