@@ -26,11 +26,15 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(3, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const timeString = formatTime(displayTime);
   const [minutes, seconds] = timeString.split(':');
+  
+  // Split minutes and seconds into individual digits
+  const minuteDigits = minutes.split('');
+  const secondDigits = seconds.split('');
 
   const FlipDigit = ({ digit, keyPrefix }: { digit: string; keyPrefix: string }) => {
     return (
@@ -112,14 +116,14 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         }
       `}</style>
       <div className="flex items-center justify-center space-x-1">
-        {/* Minutes - First Digit */}
-        <FlipDigit digit={minutes[0]} keyPrefix={`min1-${flipKey}`} />
-        
-        {/* Minutes - Second Digit */}
-        <FlipDigit digit={minutes[1]} keyPrefix={`min2-${flipKey}`} />
-        
-        {/* Minutes - Third Digit */}
-        <FlipDigit digit={minutes[2]} keyPrefix={`min3-${flipKey}`} />
+        {/* Minutes - Dynamic number of digits */}
+        {minuteDigits.map((digit, index) => (
+          <FlipDigit 
+            key={`min-${index}-${flipKey}`}
+            digit={digit} 
+            keyPrefix={`min${index}-${flipKey}`} 
+          />
+        ))}
         
         {/* Colon */}
         <div className={`text-3xl font-bold mx-3 flex flex-col items-center ${
@@ -133,11 +137,14 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }`}></div>
         </div>
         
-        {/* Seconds - First Digit */}
-        <FlipDigit digit={seconds[0]} keyPrefix={`sec1-${flipKey}`} />
-        
-        {/* Seconds - Second Digit */}
-        <FlipDigit digit={seconds[1]} keyPrefix={`sec2-${flipKey}`} />
+        {/* Seconds - Dynamic number of digits */}
+        {secondDigits.map((digit, index) => (
+          <FlipDigit 
+            key={`sec-${index}-${flipKey}`}
+            digit={digit} 
+            keyPrefix={`sec${index}-${flipKey}`} 
+          />
+        ))}
       </div>
     </>
   );
