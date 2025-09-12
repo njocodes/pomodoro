@@ -78,63 +78,63 @@ export default function Home() {
   return (
         <div className={`min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
       theme === 'light' 
-        ? 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900' 
-        : 'bg-gradient-to-br from-black via-gray-900 to-black text-white'
+        ? 'bg-gray-100 text-gray-900' 
+        : 'bg-black text-white'
     }`}>
       <div className="text-center w-full max-w-4xl mx-auto px-2 sm:px-4">
-        <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-2 ${
+        <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 ${
           theme === 'light'
             ? 'text-gray-900'
             : 'text-white'
         }`}>
           Pomodoro Timer
         </h1>
-        <p className={`text-sm sm:text-base md:text-lg mb-6 sm:mb-8 md:mb-12 ${
+        <p className={`text-xs sm:text-sm md:text-base mb-4 sm:mb-6 md:mb-8 ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
           Fokussiere dich, arbeite produktiv
         </p>
         
         {/* Mode selector */}
-        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-12">
+        <div className="flex flex-col sm:flex-row justify-center gap-1 sm:gap-2 mb-4 sm:mb-6 md:mb-8">
           <button
             onClick={() => switchMode('work')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg ${
+            className={`px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 ${
               mode === 'work' 
                 ? theme === 'light'
-                  ? 'bg-gray-900 text-white shadow-gray-900/25'
-                  : 'bg-gray-600 text-white shadow-gray-600/25'
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-700 text-white'
                 : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
-                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             }`}
           >
             Arbeit
           </button>
           <button
             onClick={() => switchMode('shortBreak')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg ${
+            className={`px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 ${
               mode === 'shortBreak' 
                 ? theme === 'light'
-                  ? 'bg-gray-900 text-white shadow-gray-900/25'
-                  : 'bg-gray-600 text-white shadow-gray-600/25'
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-700 text-white'
                 : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
-                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             }`}
           >
             Kurze Pause
           </button>
           <button
             onClick={() => switchMode('longBreak')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-lg ${
+            className={`px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 ${
               mode === 'longBreak' 
                 ? theme === 'light'
-                  ? 'bg-gray-900 text-white shadow-gray-900/25'
-                  : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-500/25'
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-700 text-white'
                 : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
-                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             }`}
           >
             Lange Pause
@@ -142,13 +142,13 @@ export default function Home() {
         </div>
 
         {/* Timer display */}
-        <div className="mb-6 sm:mb-8 md:mb-12">
-          <div className={`backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl ${
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className={`rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${
             theme === 'light'
-              ? 'bg-white/80 border border-gray-200'
-              : 'bg-gray-800/30 border border-gray-700/50'
+              ? 'bg-white border border-gray-200'
+              : 'bg-gray-900 border border-gray-700'
           }`}>
-            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
+            <h2 className={`text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 text-center ${
               theme === 'light'
                 ? 'text-gray-900'
                 : 'text-white'
@@ -161,37 +161,37 @@ export default function Home() {
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-12">
+        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8">
           <button
             onClick={toggleTimer}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
+            className={`px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
               isRunning 
                 ? theme === 'light'
-                  ? 'bg-gray-900 hover:bg-gray-800 text-white shadow-gray-900/25'
-                  : 'bg-gray-700 hover:bg-gray-600 text-white shadow-gray-700/25'
+                  ? 'bg-gray-900 hover:bg-gray-800 text-white'
+                  : 'bg-gray-700 hover:bg-gray-600 text-white'
                 : theme === 'light'
-                  ? 'bg-gray-700 hover:bg-gray-800 text-white shadow-gray-700/25'
-                  : 'bg-gray-600 hover:bg-gray-500 text-white shadow-gray-600/25'
+                  ? 'bg-gray-700 hover:bg-gray-800 text-white'
+                  : 'bg-gray-600 hover:bg-gray-500 text-white'
             }`}
           >
             {isRunning ? 'Pause' : 'Start'}
           </button>
           <button
             onClick={resetTimer}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
+            className={`px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
               theme === 'light'
-                ? 'bg-gray-300 hover:bg-gray-400 text-gray-900 shadow-gray-300/25'
-                : 'bg-gray-800 hover:bg-gray-700 text-white shadow-gray-800/25'
+                ? 'bg-gray-300 hover:bg-gray-400 text-gray-900'
+                : 'bg-gray-800 hover:bg-gray-700 text-white'
             }`}
           >
             Reset
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
+            className={`px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
               theme === 'light'
-                ? 'bg-gray-200 hover:bg-gray-300 text-gray-900 border border-gray-300 shadow-gray-200/25'
-                : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 shadow-gray-700/25'
+                ? 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                : 'bg-gray-700 hover:bg-gray-600 text-white'
             }`}
           >
             Einstellungen
@@ -199,12 +199,12 @@ export default function Home() {
         </div>
 
         {/* Pomodoro counter */}
-        <div className={`backdrop-blur-sm rounded-2xl px-8 py-4 ${
+        <div className={`rounded-lg px-4 py-3 ${
           theme === 'light'
-            ? 'bg-white/60 border border-gray-200'
-            : 'bg-gray-800/20 border border-gray-700/30'
+            ? 'bg-gray-100 border border-gray-200'
+            : 'bg-gray-800 border border-gray-700'
         }`}>
-          <div className={`text-xl font-semibold ${
+          <div className={`text-sm font-medium ${
             theme === 'light' ? 'text-gray-700' : 'text-gray-300'
           }`}>
             Pomodoros heute: <span className={`font-bold ${

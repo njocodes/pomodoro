@@ -76,7 +76,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
-      <div className="relative w-16 h-20 sm:w-18 sm:h-24 md:w-20 md:h-28 overflow-hidden">
+      <div className="relative w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 overflow-hidden">
         {/* Static display - shows current digit split in half */}
         <div 
           className={`absolute inset-0 rounded-md shadow-xl ${
@@ -87,14 +87,14 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         >
           {/* Top half of digit */}
           <div className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center overflow-hidden">
-            <div className="text-4xl sm:text-5xl md:text-6xl font-bold transform translate-y-1/2">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform translate-y-1/2">
               {digit}
             </div>
           </div>
           
           {/* Bottom half of digit */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-start justify-center overflow-hidden">
-            <div className="text-4xl sm:text-5xl md:text-6xl font-bold transform -translate-y-1/2">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform -translate-y-1/2">
               {digit}
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             }}
           >
             <div className="flex items-end justify-center h-full overflow-hidden">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold transform translate-y-1/2">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform translate-y-1/2">
                 {oldDigit}
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }
         }
       `}</style>
-      <div className="flex items-center justify-center space-x-2 sm:space-x-3 md:space-x-4">
+      <div className="flex items-center justify-center space-x-1 sm:space-x-2 md:space-x-3">
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
@@ -163,7 +163,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         ))}
         
         {/* Colon */}
-        <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mx-3 sm:mx-4 md:mx-5 flex flex-col items-center ${
+        <div className={`text-2xl sm:text-3xl md:text-4xl font-bold mx-2 sm:mx-3 md:mx-4 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
           <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full mb-1 ${
