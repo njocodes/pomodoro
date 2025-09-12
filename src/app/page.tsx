@@ -21,6 +21,28 @@ export default function Home() {
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleTimerComplete = useCallback(() => {
+    setIsRunning(false);
+    
+    if (mode === 'work') {
+      const newPomodoroCount = pomodoroCount + 1;
+      setPomodoroCount(newPomodoroCount);
+      
+      // Every 4 pomodoros, take a long break
+      if (newPomodoroCount % 4 === 0) {
+        setMode('longBreak');
+        setTimeLeft(longBreak * 60);
+      } else {
+        setMode('shortBreak');
+        setTimeLeft(shortBreak * 60);
+      }
+    } else {
+      // Break finished, back to work
+      setMode('work');
+      setTimeLeft(workTime * 60);
+    }
+  }, [mode, pomodoroCount, longBreak, shortBreak, workTime]);
+
   // Timer logic
   useEffect(() => {
     if (isRunning) {
@@ -47,28 +69,6 @@ export default function Home() {
       }
     };
   }, [isRunning, handleTimerComplete]);
-
-  const handleTimerComplete = useCallback(() => {
-    setIsRunning(false);
-    
-    if (mode === 'work') {
-      const newPomodoroCount = pomodoroCount + 1;
-      setPomodoroCount(newPomodoroCount);
-      
-      // Every 4 pomodoros, take a long break
-      if (newPomodoroCount % 4 === 0) {
-        setMode('longBreak');
-        setTimeLeft(longBreak * 60);
-      } else {
-        setMode('shortBreak');
-        setTimeLeft(shortBreak * 60);
-      }
-    } else {
-      // Break finished, back to work
-      setMode('work');
-      setTimeLeft(workTime * 60);
-    }
-  }, [mode, pomodoroCount, longBreak, shortBreak, workTime]);
 
   const playNotificationSound = () => {
     // Create a simple beep sound
