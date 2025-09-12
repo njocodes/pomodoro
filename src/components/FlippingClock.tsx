@@ -21,9 +21,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
       // Find which digits changed
       const changedDigits = new Set<string>();
       
-      // Check minutes - pad with leading zeros for comparison
-      const oldMinDigits = oldMinutes.padStart(2, '0').split('');
-      const newMinDigits = newMinutes.padStart(2, '0').split('');
+      // Check minutes - compare without padding
+      const oldMinDigits = oldMinutes.split('');
+      const newMinDigits = newMinutes.split('');
       for (let i = 0; i < Math.max(oldMinDigits.length, newMinDigits.length); i++) {
         const oldDigit = oldMinDigits[i] || '0';
         const newDigit = newMinDigits[i] || '0';
@@ -55,8 +55,8 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    // Only pad minutes if they're less than 10, otherwise show natural number
-    const minsStr = mins < 10 ? mins.toString() : mins.toString();
+    // Show minutes as natural number (no padding)
+    const minsStr = mins.toString();
     return `${minsStr}:${secs.toString().padStart(2, '0')}`;
   };
 
@@ -64,8 +64,8 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const [minutes, seconds] = timeString.split(':');
   
   // Split minutes and seconds into individual digits
-  // Pad minutes to 2 digits for consistent display
-  const minuteDigits = minutes.padStart(2, '0').split('');
+  // Don't pad minutes - show only needed digits
+  const minuteDigits = minutes.split('');
   const secondDigits = seconds.padStart(2, '0').split('');
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping }: { digit: string; keyPrefix: string; isFlipping: boolean }) => {
