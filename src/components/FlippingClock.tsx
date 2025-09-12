@@ -77,24 +77,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
       <div className="relative w-16 h-20 overflow-hidden">
-        {/* Static display - top and bottom show current digit */}
-        <div 
-          className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
-            theme === 'light'
-              ? 'bg-white text-gray-900 border-gray-300'
-              : 'bg-gray-800 text-gray-100 border-gray-700'
-          }`}
-        >
-          <div className="flex items-center justify-center h-full text-5xl font-bold relative">
-            {digit}
-            <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
-              theme === 'light' 
-                ? 'bg-gradient-to-b from-gray-200/50 to-transparent' 
-                : 'bg-gradient-to-b from-gray-600/30 to-transparent'
-            }`}></div>
-          </div>
-        </div>
-        
+        {/* Bottom half - shows current digit */}
         <div 
           className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md shadow-xl border-t ${
             theme === 'light'
@@ -112,30 +95,28 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         </div>
         
-        {/* Flip animation - shows old digit flipping to new digit */}
-        {isFlipping && oldDigit && (
-          <div 
-            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
-              theme === 'light'
-                ? 'bg-white text-gray-900 border-gray-300'
-                : 'bg-gray-800 text-gray-100 border-gray-700'
-            }`}
-            style={{
-              transform: 'rotateX(-180deg)',
-              transformOrigin: 'bottom',
-              animation: 'flipDown 0.7s ease-in-out forwards'
-            }}
-          >
-            <div className="flex items-center justify-center h-full text-5xl font-bold relative">
-              {oldDigit}
-              <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
-                theme === 'light' 
-                  ? 'bg-gradient-to-b from-gray-200/50 to-transparent' 
-                  : 'bg-gradient-to-b from-gray-600/30 to-transparent'
-              }`}></div>
-            </div>
+        {/* Top half - shows old digit and flips to reveal new digit */}
+        <div 
+          className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
+            theme === 'light'
+              ? 'bg-white text-gray-900 border-gray-300'
+              : 'bg-gray-800 text-gray-100 border-gray-700'
+          }`}
+          style={{
+            transform: isFlipping ? 'rotateX(-180deg)' : 'rotateX(0deg)',
+            transformOrigin: 'bottom',
+            transition: 'transform 0.7s ease-in-out'
+          }}
+        >
+          <div className="flex items-center justify-center h-full text-5xl font-bold relative">
+            {isFlipping ? (oldDigit || digit) : digit}
+            <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
+              theme === 'light' 
+                ? 'bg-gradient-to-b from-gray-200/50 to-transparent' 
+                : 'bg-gradient-to-b from-gray-600/30 to-transparent'
+            }`}></div>
           </div>
-        )}
+        </div>
         
         {/* Base shadow */}
         <div className={`absolute -bottom-1 left-0 right-0 h-1 rounded-full shadow-lg ${
@@ -146,18 +127,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   };
 
   return (
-    <>
-      <style jsx>{`
-        @keyframes flipDown {
-          0% {
-            transform: rotateX(0deg);
-          }
-          100% {
-            transform: rotateX(-180deg);
-          }
-        }
-      `}</style>
-      <div className="flex items-center justify-center space-x-1">
+    <div className="flex items-center justify-center space-x-1">
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
@@ -192,6 +162,5 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           />
         ))}
       </div>
-    </>
   );
 }
