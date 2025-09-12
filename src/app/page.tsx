@@ -4,14 +4,18 @@ import { useState, useEffect } from 'react';
 import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import EdgeProgressBar from '@/components/EdgeProgressBar';
+import MobileModeDropdown from '@/components/MobileModeDropdown';
+import CornerDropdown from '@/components/CornerDropdown';
 import SettingsModal from '@/components/SettingsModal';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useTimer } from '@/hooks/useTimer';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export default function Home() {
   const { theme } = useTheme();
   const [showSettings, setShowSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isMobile = useIsMobile();
   
   const {
     timeLeft,
@@ -63,6 +67,13 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
+
+  // Handle touch to start/stop on mobile
+  const handleTouchStart = () => {
+    if (isMobile && !isFullscreen) {
+      toggleTimer();
+    }
+  };
 
   const handleSaveSettings = (newWorkTime: number, newShortBreak: number, newLongBreak: number) => {
     updateSettings(newWorkTime, newShortBreak, newLongBreak);
@@ -166,73 +177,88 @@ export default function Home() {
         ? 'bg-gray-100 text-gray-900' 
         : 'bg-black text-white'
     }`}>
-      <div className="text-center w-full max-w-4xl mx-auto px-2 sm:px-4">
-        <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 ${
+      <div className={`text-center w-full mx-auto px-2 sm:px-4 ${
+        isMobile ? 'max-w-sm' : 'max-w-4xl'
+      }`}>
+        <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl md:text-5xl'} font-bold mb-2 sm:mb-3 ${
           theme === 'light'
             ? 'text-gray-900'
             : 'text-white'
         }`}>
           Pomodoro Timer
         </h1>
-        <p className={`text-sm sm:text-base md:text-lg mb-6 sm:mb-8 md:mb-10 ${
+        <p className={`${isMobile ? 'text-xs' : 'text-sm sm:text-base md:text-lg'} mb-6 sm:mb-8 md:mb-10 ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
           Fokussiere dich, arbeite produktiv
         </p>
         
         {/* Mode selector */}
-        <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">
-          <button
-            onClick={() => switchMode('work')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
-              mode === 'work' 
-                ? theme === 'light'
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-700 text-white'
-                : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Arbeit
-          </button>
-          <button
-            onClick={() => switchMode('shortBreak')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
-              mode === 'shortBreak' 
-                ? theme === 'light'
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-700 text-white'
-                : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Kurze Pause
-          </button>
-          <button
-            onClick={() => switchMode('longBreak')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
-              mode === 'longBreak' 
-                ? theme === 'light'
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-700 text-white'
-                : theme === 'light'
-                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            Lange Pause
-          </button>
-        </div>
+        {isMobile ? (
+          <div className="flex justify-center mb-6">
+            <MobileModeDropdown 
+              mode={mode} 
+              onModeChange={switchMode} 
+              theme={theme} 
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10">
+            <button
+              onClick={() => switchMode('work')}
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
+                mode === 'work' 
+                  ? theme === 'light'
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-700 text-white'
+                  : theme === 'light'
+                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              Arbeit
+            </button>
+            <button
+              onClick={() => switchMode('shortBreak')}
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
+                mode === 'shortBreak' 
+                  ? theme === 'light'
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-700 text-white'
+                  : theme === 'light'
+                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              Kurze Pause
+            </button>
+            <button
+              onClick={() => switchMode('longBreak')}
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 ${
+                mode === 'longBreak' 
+                  ? theme === 'light'
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-700 text-white'
+                  : theme === 'light'
+                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              Lange Pause
+            </button>
+          </div>
+        )}
 
         {/* Timer display */}
         <div className="mb-6 sm:mb-8 md:mb-10">
-          <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 ${
-            theme === 'light'
-              ? 'bg-white border border-gray-200'
-              : 'bg-gray-900 border border-gray-700'
-          }`}>
+          <div 
+            className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 ${
+              theme === 'light'
+                ? 'bg-white border border-gray-200'
+                : 'bg-gray-900 border border-gray-700'
+            } ${isMobile ? 'cursor-pointer' : ''}`}
+            onClick={handleTouchStart}
+          >
             <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
               theme === 'light'
                 ? 'text-gray-900'
@@ -242,46 +268,55 @@ export default function Home() {
             </h2>
             <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={false} />
             <ProgressBar progress={getProgress()} color={getProgressColor()} theme={theme} />
+            {isMobile && (
+              <div className={`text-xs text-center mt-2 ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}>
+                {isRunning ? 'Tippen zum Pausieren' : 'Tippen zum Starten'}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
-          <button
-            onClick={toggleTimer}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
-              isRunning 
-                ? theme === 'light'
-                  ? 'bg-gray-900 hover:bg-gray-800 text-white'
+        {!isMobile && (
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
+            <button
+              onClick={toggleTimer}
+              className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
+                isRunning 
+                  ? theme === 'light'
+                    ? 'bg-gray-900 hover:bg-gray-800 text-white'
+                    : 'bg-gray-700 hover:bg-gray-600 text-white'
+                  : theme === 'light'
+                    ? 'bg-gray-700 hover:bg-gray-800 text-white'
+                    : 'bg-gray-600 hover:bg-gray-500 text-white'
+              }`}
+            >
+              {isRunning ? 'Pause' : 'Start'}
+            </button>
+            <button
+              onClick={resetTimer}
+              className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
+                theme === 'light'
+                  ? 'bg-gray-300 hover:bg-gray-400 text-gray-900'
+                  : 'bg-gray-800 hover:bg-gray-700 text-white'
+              }`}
+            >
+              Reset
+            </button>
+            <button
+              onClick={() => setShowSettings(true)}
+              className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
+                theme === 'light'
+                  ? 'bg-gray-200 hover:bg-gray-300 text-gray-900'
                   : 'bg-gray-700 hover:bg-gray-600 text-white'
-                : theme === 'light'
-                  ? 'bg-gray-700 hover:bg-gray-800 text-white'
-                  : 'bg-gray-600 hover:bg-gray-500 text-white'
-            }`}
-          >
-            {isRunning ? 'Pause' : 'Start'}
-          </button>
-          <button
-            onClick={resetTimer}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
-              theme === 'light'
-                ? 'bg-gray-300 hover:bg-gray-400 text-gray-900'
-                : 'bg-gray-800 hover:bg-gray-700 text-white'
-            }`}
-          >
-            Reset
-          </button>
-          <button
-            onClick={() => setShowSettings(true)}
-            className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
-              theme === 'light'
-                ? 'bg-gray-200 hover:bg-gray-300 text-gray-900'
-                : 'bg-gray-700 hover:bg-gray-600 text-white'
-            }`}
-          >
-            Einstellungen
-          </button>
-        </div>
+              }`}
+            >
+              Einstellungen
+            </button>
+          </div>
+        )}
 
         {/* Pomodoro counter */}
         <div className={`rounded-lg px-4 py-3 ${
@@ -307,6 +342,15 @@ export default function Home() {
           Leertaste für Vollbildmodus
         </div>
       </div>
+
+      {/* Mobile Corner Dropdown */}
+      {isMobile && (
+        <CornerDropdown 
+          onReset={resetTimer}
+          onSettings={() => setShowSettings(true)}
+          theme={theme}
+        />
+      )}
 
       <SettingsModal
         isOpen={showSettings}
