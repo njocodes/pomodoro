@@ -97,7 +97,29 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         </div>
         
-        {/* Top half - shows top part of digit and flips */}
+        {/* Background new digit - shows behind flipping old digit */}
+        {isFlipping && (
+          <div 
+            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
+              theme === 'light'
+                ? 'bg-white text-gray-900 border-gray-300'
+                : 'bg-gray-800 text-gray-100 border-gray-700'
+            }`}
+          >
+            <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
+              <div className="transform translate-y-1">
+                {digit}
+              </div>
+              <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
+                theme === 'light' 
+                  ? 'bg-gradient-to-b from-gray-200/50 to-transparent' 
+                  : 'bg-gradient-to-b from-gray-600/30 to-transparent'
+              }`}></div>
+            </div>
+          </div>
+        )}
+        
+        {/* Top half - shows old digit and flips */}
         <div 
           className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
             theme === 'light'
