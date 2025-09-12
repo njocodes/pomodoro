@@ -86,7 +86,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }`}
         >
           <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
-            <div className="transform translate-y-1/2">
+            <div className="transform -translate-y-1/2">
               {digit}
             </div>
             <div className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md ${
@@ -111,7 +111,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }}
         >
           <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
-            <div className="transform -translate-y-1/2">
+            <div className="transform translate-y-1/2">
               {isFlipping ? (oldDigit || digit) : digit}
             </div>
             <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
