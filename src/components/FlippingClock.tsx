@@ -116,7 +116,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             style={{
               transform: 'rotateX(-180deg)',
               transformOrigin: 'bottom',
-              animation: 'flipDown 0.7s ease-in-out forwards'
+              animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards'
             }}
           >
             <div className="flex items-end justify-center h-full overflow-hidden">
@@ -141,6 +141,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         @keyframes flipDown {
           0% {
             transform: rotateX(0deg);
+          }
+          50% {
+            transform: rotateX(-90deg);
           }
           100% {
             transform: rotateX(-180deg);
