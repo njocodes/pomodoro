@@ -4,10 +4,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import SettingsModal from '@/components/SettingsModal';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type TimerMode = 'work' | 'shortBreak' | 'longBreak';
 
 export default function Home() {
+  const { theme } = useTheme();
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState<TimerMode>('work');
@@ -148,12 +150,24 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-center p-4">
+    <div className={`min-h-screen flex flex-col items-center justify-center p-4 ${
+      theme === 'light' 
+        ? 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900' 
+        : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white'
+    }`}>
       <div className="text-center max-w-4xl mx-auto">
-        <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-red-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+        <h1 className={`text-5xl font-bold mb-2 ${
+          theme === 'light'
+            ? 'text-gray-900'
+            : 'bg-gradient-to-r from-red-400 via-pink-500 to-purple-600 bg-clip-text text-transparent'
+        }`}>
           Pomodoro Timer
         </h1>
-        <p className="text-gray-400 text-lg mb-12">Fokussiere dich, arbeite produktiv</p>
+        <p className={`text-lg mb-12 ${
+          theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+        }`}>
+          Fokussiere dich, arbeite produktiv
+        </p>
         
         {/* Mode selector */}
         <div className="flex justify-center space-x-3 mb-12">
@@ -161,42 +175,62 @@ export default function Home() {
             onClick={() => switchMode('work')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'work' 
-                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/25' 
-                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                ? theme === 'light'
+                  ? 'bg-gray-900 text-white shadow-gray-900/25'
+                  : 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/25'
+                : theme === 'light'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
+                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            ⚡ Arbeit
+            Arbeit
           </button>
           <button
             onClick={() => switchMode('shortBreak')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'shortBreak' 
-                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-green-500/25' 
-                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                ? theme === 'light'
+                  ? 'bg-gray-900 text-white shadow-gray-900/25'
+                  : 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-green-500/25'
+                : theme === 'light'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
+                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            ☕ Kurze Pause
+            Kurze Pause
           </button>
           <button
             onClick={() => switchMode('longBreak')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'longBreak' 
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-500/25' 
-                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
+                ? theme === 'light'
+                  ? 'bg-gray-900 text-white shadow-gray-900/25'
+                  : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-500/25'
+                : theme === 'light'
+                  ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300'
+                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            🍃 Lange Pause
+            Lange Pause
           </button>
         </div>
 
         {/* Timer display */}
         <div className="mb-12">
-          <div className="bg-gray-800/30 backdrop-blur-sm rounded-3xl p-8 border border-gray-700/50 shadow-2xl">
-            <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <div className={`backdrop-blur-sm rounded-3xl p-8 shadow-2xl ${
+            theme === 'light'
+              ? 'bg-white/80 border border-gray-200'
+              : 'bg-gray-800/30 border border-gray-700/50'
+          }`}>
+            <h2 className={`text-3xl font-bold mb-8 text-center ${
+              theme === 'light'
+                ? 'text-gray-900'
+                : 'bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent'
+            }`}>
               {getModeText()}
             </h2>
-            <FlippingClock timeLeft={timeLeft} />
-            <ProgressBar progress={getProgress()} color={getProgressColor()} />
+            <FlippingClock timeLeft={timeLeft} theme={theme} />
+            <ProgressBar progress={getProgress()} color={getProgressColor()} theme={theme} />
           </div>
         </div>
 
@@ -206,30 +240,52 @@ export default function Home() {
             onClick={toggleTimer}
             className={`px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
               isRunning 
-                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-yellow-500/25' 
-                : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-green-500/25'
+                ? theme === 'light'
+                  ? 'bg-gray-900 hover:bg-gray-800 text-white shadow-gray-900/25'
+                  : 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-yellow-500/25'
+                : theme === 'light'
+                  ? 'bg-gray-700 hover:bg-gray-800 text-white shadow-gray-700/25'
+                  : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-green-500/25'
             }`}
           >
-            {isRunning ? '⏸️ Pause' : '▶️ Start'}
+            {isRunning ? 'Pause' : 'Start'}
           </button>
           <button
             onClick={resetTimer}
-            className="px-10 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl text-white"
+            className={`px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
+              theme === 'light'
+                ? 'bg-gray-300 hover:bg-gray-400 text-gray-900 shadow-gray-300/25'
+                : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-gray-600/25'
+            }`}
           >
-            🔄 Reset
+            Reset
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className="px-10 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl text-white shadow-purple-500/25"
+            className={`px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
+              theme === 'light'
+                ? 'bg-gray-200 hover:bg-gray-300 text-gray-900 border border-gray-300 shadow-gray-200/25'
+                : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-500/25'
+            }`}
           >
-            ⚙️ Einstellungen
+            Einstellungen
           </button>
         </div>
 
         {/* Pomodoro counter */}
-        <div className="bg-gray-800/20 backdrop-blur-sm rounded-2xl px-8 py-4 border border-gray-700/30">
-          <div className="text-xl font-semibold text-gray-300">
-            🍅 Pomodoros heute: <span className="font-bold bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent">{pomodoroCount}</span>
+        <div className={`backdrop-blur-sm rounded-2xl px-8 py-4 ${
+          theme === 'light'
+            ? 'bg-white/60 border border-gray-200'
+            : 'bg-gray-800/20 border border-gray-700/30'
+        }`}>
+          <div className={`text-xl font-semibold ${
+            theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+          }`}>
+            Pomodoros heute: <span className={`font-bold ${
+              theme === 'light'
+                ? 'text-gray-900'
+                : 'bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent'
+            }`}>{pomodoroCount}</span>
           </div>
         </div>
       </div>
