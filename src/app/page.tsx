@@ -56,7 +56,8 @@ export default function Home() {
   const getProgress = () => {
     const totalTime = mode === 'work' ? workTime * 60 : 
                      mode === 'shortBreak' ? shortBreak * 60 : longBreak * 60;
-    return ((totalTime - timeLeft) / totalTime) * 100;
+    const progress = ((totalTime - timeLeft) / totalTime) * 100;
+    return Math.min(100, Math.max(0, progress));
   };
 
   const getProgressColor = () => {

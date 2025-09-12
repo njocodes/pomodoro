@@ -70,7 +70,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping }: { digit: string; keyPrefix: string; isFlipping: boolean }) => {
     return (
-      <div className="relative w-16 h-20">
+      <div className="relative w-16 h-20 overflow-hidden">
         {/* Bottom half - shows current digit */}
         <div 
           className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md shadow-xl border-t ${
@@ -89,7 +89,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         </div>
         
-        {/* Top half - shows old digit and flips */}
+        {/* Top half - shows old digit and flips to show new digit */}
         <div 
           className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
             theme === 'light'
