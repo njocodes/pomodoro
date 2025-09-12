@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react';
 
 interface FlippingClockProps {
   timeLeft: number; // in seconds
-  isRunning: boolean;
 }
 
-export default function FlippingClock({ timeLeft, isRunning }: FlippingClockProps) {
+export default function FlippingClock({ timeLeft }: FlippingClockProps) {
   const [displayTime, setDisplayTime] = useState(timeLeft);
   const [isFlipping, setIsFlipping] = useState(false);
 
@@ -17,7 +16,7 @@ export default function FlippingClock({ timeLeft, isRunning }: FlippingClockProp
       setIsFlipping(true);
       setTimeout(() => setIsFlipping(false), 300);
     }
-  }, [timeLeft]);
+  }, [timeLeft, displayTime]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import SettingsModal from '@/components/SettingsModal';
@@ -46,9 +46,9 @@ export default function Home() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning]);
+  }, [isRunning, handleTimerComplete]);
 
-  const handleTimerComplete = () => {
+  const handleTimerComplete = useCallback(() => {
     setIsRunning(false);
     
     if (mode === 'work') {
@@ -68,11 +68,11 @@ export default function Home() {
       setMode('work');
       setTimeLeft(workTime * 60);
     }
-  };
+  }, [mode, pomodoroCount, longBreak, shortBreak, workTime]);
 
   const playNotificationSound = () => {
     // Create a simple beep sound
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     
@@ -189,7 +189,7 @@ export default function Home() {
         {/* Timer display */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-gray-300">{getModeText()}</h2>
-          <FlippingClock timeLeft={timeLeft} isRunning={isRunning} />
+          <FlippingClock timeLeft={timeLeft} />
           <ProgressBar progress={getProgress()} color={getProgressColor()} />
         </div>
 
