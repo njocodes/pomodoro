@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 interface FlippingClockProps {
   timeLeft: number; // in seconds
   theme: 'light' | 'dark';
+  isFullscreen?: boolean;
 }
 
-export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
+export default function FlippingClock({ timeLeft, theme, isFullscreen = false }: FlippingClockProps) {
   const [displayTime, setDisplayTime] = useState(timeLeft);
   const [flippingDigits, setFlippingDigits] = useState<Set<string>>(new Set());
   const [oldDigits, setOldDigits] = useState<Map<string, string>>(new Map());
@@ -76,7 +77,11 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
-      <div className="relative w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 overflow-hidden">
+      <div className={`relative overflow-hidden ${
+        isFullscreen 
+          ? 'w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36'
+          : 'w-16 h-20 sm:w-18 sm:h-24 md:w-20 md:h-28'
+      }`}>
         {/* Static display - shows current digit split in half */}
         <div 
           className={`absolute inset-0 rounded-md shadow-xl ${
@@ -87,14 +92,22 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         >
           {/* Top half of digit */}
           <div className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center overflow-hidden">
-            <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform translate-y-1/2">
+            <div className={`font-bold transform translate-y-1/2 ${
+              isFullscreen 
+                ? 'text-4xl sm:text-5xl md:text-6xl'
+                : 'text-3xl sm:text-4xl md:text-5xl'
+            }`}>
               {digit}
             </div>
           </div>
           
           {/* Bottom half of digit */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-start justify-center overflow-hidden">
-            <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform -translate-y-1/2">
+            <div className={`font-bold transform -translate-y-1/2 ${
+              isFullscreen 
+                ? 'text-4xl sm:text-5xl md:text-6xl'
+                : 'text-3xl sm:text-4xl md:text-5xl'
+            }`}>
               {digit}
             </div>
           </div>
@@ -120,7 +133,11 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             }}
           >
             <div className="flex items-end justify-center h-full overflow-hidden">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold transform translate-y-1/2">
+              <div className={`font-bold transform translate-y-1/2 ${
+                isFullscreen 
+                  ? 'text-4xl sm:text-5xl md:text-6xl'
+                  : 'text-3xl sm:text-4xl md:text-5xl'
+              }`}>
                 {oldDigit}
               </div>
             </div>
@@ -150,7 +167,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }
         }
       `}</style>
-      <div className="flex items-center justify-center space-x-1 sm:space-x-2 md:space-x-3">
+      <div className="flex items-center justify-center space-x-2 sm:space-x-3 md:space-x-4">
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
@@ -163,7 +180,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         ))}
         
         {/* Colon */}
-        <div className={`text-2xl sm:text-3xl md:text-4xl font-bold mx-2 sm:mx-3 md:mx-4 flex flex-col items-center ${
+        <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mx-3 sm:mx-4 md:mx-5 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
           <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full mb-1 ${
