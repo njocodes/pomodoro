@@ -9,16 +9,45 @@ interface FlippingClockProps {
 
 export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const [displayTime, setDisplayTime] = useState(timeLeft);
-  const [isFlipping, setIsFlipping] = useState(false);
-  const [flipKey, setFlipKey] = useState(0);
+  const [flippingDigits, setFlippingDigits] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (timeLeft !== displayTime) {
-      setIsFlipping(true);
-      setFlipKey(prev => prev + 1);
+      const oldTime = formatTime(displayTime);
+      const newTime = formatTime(timeLeft);
+      const [oldMinutes, oldSeconds] = oldTime.split(':');
+      const [newMinutes, newSeconds] = newTime.split(':');
+      
+      // Find which digits changed
+      const changedDigits = new Set<string>();
+      
+      // Check minutes
+      const oldMinDigits = oldMinutes.split('');
+      const newMinDigits = newMinutes.split('');
+      for (let i = 0; i < Math.max(oldMinDigits.length, newMinDigits.length); i++) {
+        const oldDigit = oldMinDigits[i] || '0';
+        const newDigit = newMinDigits[i] || '0';
+        if (oldDigit !== newDigit) {
+          changedDigits.add(`min-${i}`);
+        }
+      }
+      
+      // Check seconds
+      const oldSecDigits = oldSeconds.split('');
+      const newSecDigits = newSeconds.split(':');
+      for (let i = 0; i < Math.max(oldSecDigits.length, newSecDigits.length); i++) {
+        const oldDigit = oldSecDigits[i] || '0';
+        const newDigit = newSecDigits[i] || '0';
+        if (oldDigit !== newDigit) {
+          changedDigits.add(`sec-${i}`);
+        }
+      }
+      
+      setFlippingDigits(changedDigits);
+      
       setTimeout(() => {
         setDisplayTime(timeLeft);
-        setIsFlipping(false);
+        setFlippingDigits(new Set());
       }, 300);
     }
   }, [timeLeft, displayTime]);
@@ -36,12 +65,12 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const minuteDigits = minutes.split('');
   const secondDigits = seconds.split('');
 
-  const FlipDigit = ({ digit, keyPrefix }: { digit: string; keyPrefix: string }) => {
+  const FlipDigit = ({ digit, keyPrefix, isFlipping }: { digit: string; keyPrefix: string; isFlipping: boolean }) => {
     return (
       <div className="relative w-16 h-20">
-        {/* Current digit */}
+        {/* Current digit - bottom half */}
         <div 
-          className={`absolute inset-0 rounded-md shadow-xl border transition-all duration-300 ${
+          className={`absolute inset-0 rounded-md shadow-xl border ${
             theme === 'light'
               ? 'bg-white text-gray-900 border-gray-300'
               : 'bg-gray-800 text-gray-100 border-gray-700'
@@ -62,10 +91,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         </div>
         
-        {/* Flipping animation overlay */}
+        {/* Flipping animation - top half */}
         {isFlipping && (
           <div 
-            className={`absolute inset-0 rounded-md shadow-xl border transition-all duration-300 ${
+            className={`absolute inset-0 rounded-md shadow-xl border ${
               theme === 'light'
                 ? 'bg-white text-gray-900 border-gray-300'
                 : 'bg-gray-800 text-gray-100 border-gray-700'
@@ -111,7 +140,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             transform: rotateX(-90deg);
           }
           100% {
-            transform: rotateX(0deg);
+            transform: rotateX(-180deg);
           }
         }
       `}</style>
@@ -119,9 +148,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
-            key={`min-${index}-${flipKey}`}
+            key={`min-${index}`}
             digit={digit} 
-            keyPrefix={`min${index}-${flipKey}`} 
+            keyPrefix={`min${index}`}
+            isFlipping={flippingDigits.has(`min-${index}`)}
           />
         ))}
         
@@ -140,9 +170,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         {/* Seconds - Dynamic number of digits */}
         {secondDigits.map((digit, index) => (
           <FlipDigit 
-            key={`sec-${index}-${flipKey}`}
+            key={`sec-${index}`}
             digit={digit} 
-            keyPrefix={`sec${index}-${flipKey}`} 
+            keyPrefix={`sec${index}`}
+            isFlipping={flippingDigits.has(`sec-${index}`)}
           />
         ))}
       </div>
