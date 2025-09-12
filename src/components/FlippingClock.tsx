@@ -76,7 +76,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
 
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
-      <div className="relative w-16 h-20 overflow-hidden">
+      <div className="relative w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 overflow-hidden">
         {/* Bottom half - shows bottom part of current digit */}
         <div 
           className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md shadow-xl border-t ${
@@ -85,8 +85,8 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
               : 'bg-gray-800 text-gray-100 border-gray-700'
           }`}
         >
-          <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
-            <div className="transform -translate-y-2">
+          <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
+            <div className="transform -translate-y-1">
               {digit}
             </div>
             <div className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md ${
@@ -110,8 +110,8 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             transition: 'transform 0.7s ease-in-out'
           }}
         >
-          <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
-            <div className="transform translate-y-2">
+          <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
+            <div className="transform translate-y-1">
               {isFlipping ? (oldDigit || digit) : digit}
             </div>
             <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
@@ -131,7 +131,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   };
 
   return (
-    <div className="flex items-center justify-center space-x-1">
+    <div className="flex items-center justify-center space-x-1 sm:space-x-2">
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
@@ -144,13 +144,13 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         ))}
         
         {/* Colon */}
-        <div className={`text-3xl font-bold mx-3 flex flex-col items-center ${
+        <div className={`text-2xl sm:text-3xl font-bold mx-2 sm:mx-3 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
-          <div className={`w-2 h-2 rounded-full mb-1 ${
+          <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mb-1 ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
           }`}></div>
-          <div className={`w-2 h-2 rounded-full ${
+          <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
           }`}></div>
         </div>

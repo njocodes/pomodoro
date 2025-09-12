@@ -33,13 +33,13 @@ export default function SettingsModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className={`rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl ${
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 shadow-2xl ${
         theme === 'light'
           ? 'bg-white border border-gray-200'
           : 'bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50'
       }`}>
-        <h2 className={`text-2xl font-bold mb-8 text-center ${
+        <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
           theme === 'light'
             ? 'text-gray-900'
             : 'bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent'
