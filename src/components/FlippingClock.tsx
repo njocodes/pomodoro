@@ -77,7 +77,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
       <div className="relative w-16 h-20 overflow-hidden">
-        {/* Bottom half - shows current digit */}
+        {/* Bottom half - shows bottom part of current digit */}
         <div 
           className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md shadow-xl border-t ${
             theme === 'light'
@@ -85,8 +85,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
               : 'bg-gray-800 text-gray-100 border-gray-700'
           }`}
         >
-          <div className="flex items-center justify-center h-full text-5xl font-bold relative">
-            {digit}
+          <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
+            <div className="transform translate-y-1/2">
+              {digit}
+            </div>
             <div className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md ${
               theme === 'light' 
                 ? 'bg-gradient-to-t from-gray-200/50 to-transparent' 
@@ -95,7 +97,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         </div>
         
-        {/* Top half - shows old digit and flips to reveal new digit */}
+        {/* Top half - shows top part of digit and flips */}
         <div 
           className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
             theme === 'light'
@@ -108,8 +110,10 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
             transition: 'transform 0.7s ease-in-out'
           }}
         >
-          <div className="flex items-center justify-center h-full text-5xl font-bold relative">
-            {isFlipping ? (oldDigit || digit) : digit}
+          <div className="flex items-center justify-center h-full text-5xl font-bold relative overflow-hidden">
+            <div className="transform -translate-y-1/2">
+              {isFlipping ? (oldDigit || digit) : digit}
+            </div>
             <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
               theme === 'light' 
                 ? 'bg-gradient-to-b from-gray-200/50 to-transparent' 
