@@ -61,8 +61,13 @@ export default function Home() {
   };
 
   const getProgressColor = () => {
-    return mode === 'work' ? 'bg-red-500' : 
-           mode === 'shortBreak' ? 'bg-green-500' : 'bg-blue-500';
+    if (theme === 'light') {
+      return mode === 'work' ? 'bg-red-500' : 
+             mode === 'shortBreak' ? 'bg-green-500' : 'bg-blue-500';
+    } else {
+      return mode === 'work' ? 'bg-gray-600' : 
+             mode === 'shortBreak' ? 'bg-gray-500' : 'bg-gray-700';
+    }
   };
 
   const getModeText = () => {
@@ -71,10 +76,10 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
+        <div className={`min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
       theme === 'light' 
         ? 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900' 
-        : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white'
+        : 'bg-gradient-to-br from-black via-gray-900 to-black text-white'
     }`}>
       <div className="text-center w-full max-w-4xl mx-auto px-2 sm:px-4">
         <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-2 ${
@@ -146,7 +151,7 @@ export default function Home() {
             <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
               theme === 'light'
                 ? 'text-gray-900'
-                : 'bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent'
+                : 'text-white'
             }`}>
               {getModeText()}
             </h2>
@@ -163,10 +168,10 @@ export default function Home() {
               isRunning 
                 ? theme === 'light'
                   ? 'bg-gray-900 hover:bg-gray-800 text-white shadow-gray-900/25'
-                  : 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-yellow-500/25'
+                  : 'bg-gray-700 hover:bg-gray-600 text-white shadow-gray-700/25'
                 : theme === 'light'
                   ? 'bg-gray-700 hover:bg-gray-800 text-white shadow-gray-700/25'
-                  : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-green-500/25'
+                  : 'bg-gray-600 hover:bg-gray-500 text-white shadow-gray-600/25'
             }`}
           >
             {isRunning ? 'Pause' : 'Start'}
@@ -176,7 +181,7 @@ export default function Home() {
             className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
               theme === 'light'
                 ? 'bg-gray-300 hover:bg-gray-400 text-gray-900 shadow-gray-300/25'
-                : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-gray-600/25'
+                : 'bg-gray-800 hover:bg-gray-700 text-white shadow-gray-800/25'
             }`}
           >
             Reset
@@ -186,7 +191,7 @@ export default function Home() {
             className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
               theme === 'light'
                 ? 'bg-gray-200 hover:bg-gray-300 text-gray-900 border border-gray-300 shadow-gray-200/25'
-                : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-purple-500/25'
+                : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 shadow-gray-700/25'
             }`}
           >
             Einstellungen
@@ -205,7 +210,7 @@ export default function Home() {
             Pomodoros heute: <span className={`font-bold ${
               theme === 'light'
                 ? 'text-gray-900'
-                : 'bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent'
+                : 'text-white'
             }`}>{pomodoroCount}</span>
           </div>
         </div>

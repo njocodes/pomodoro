@@ -42,7 +42,7 @@ export default function SettingsModal({
         <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
           theme === 'light'
             ? 'text-gray-900'
-            : 'bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent'
+            : 'text-white'
         }`}>
           Timer Einstellungen
         </h2>
