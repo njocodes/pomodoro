@@ -55,7 +55,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    // Only pad minutes if they're less than 10, otherwise show natural number
+    const minsStr = mins < 10 ? mins.toString() : mins.toString();
+    return `${minsStr}:${secs.toString().padStart(2, '0')}`;
   };
 
   const timeString = formatTime(displayTime);

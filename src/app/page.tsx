@@ -1,76 +1,29 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import SettingsModal from '@/components/SettingsModal';
 import { useTheme } from '@/contexts/ThemeContext';
-
-type TimerMode = 'work' | 'shortBreak' | 'longBreak';
+import { useTimer } from '@/hooks/useTimer';
 
 export default function Home() {
   const { theme } = useTheme();
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
-  const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState<TimerMode>('work');
-  const [pomodoroCount, setPomodoroCount] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   
-  // Settings
-  const [workTime, setWorkTime] = useState(25);
-  const [shortBreak, setShortBreak] = useState(5);
-  const [longBreak, setLongBreak] = useState(15);
-  
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleTimerComplete = useCallback(() => {
-    setIsRunning(false);
-    
-    if (mode === 'work') {
-      const newPomodoroCount = pomodoroCount + 1;
-      setPomodoroCount(newPomodoroCount);
-      
-      // Every 4 pomodoros, take a long break
-      if (newPomodoroCount % 4 === 0) {
-        setMode('longBreak');
-        setTimeLeft(longBreak * 60);
-      } else {
-        setMode('shortBreak');
-        setTimeLeft(shortBreak * 60);
-      }
-    } else {
-      // Break finished, back to work
-      setMode('work');
-      setTimeLeft(workTime * 60);
-    }
-  }, [mode, pomodoroCount, longBreak, shortBreak, workTime]);
-
-  // Timer logic
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            // Timer finished
-            playNotificationSound();
-            handleTimerComplete();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isRunning, handleTimerComplete]);
+  const {
+    timeLeft,
+    isRunning,
+    mode,
+    pomodoroCount,
+    workTime,
+    shortBreak,
+    longBreak,
+    toggleTimer,
+    resetTimer,
+    switchMode,
+    updateSettings
+  } = useTimer();
 
   const playNotificationSound = () => {
     // Create a simple beep sound
@@ -89,48 +42,15 @@ export default function Home() {
     oscillator.stop(audioContext.currentTime + 0.5);
   };
 
-  const toggleTimer = () => {
-    setIsRunning(!isRunning);
-  };
-
-  const resetTimer = () => {
-    setIsRunning(false);
-    if (mode === 'work') {
-      setTimeLeft(workTime * 60);
-    } else if (mode === 'shortBreak') {
-      setTimeLeft(shortBreak * 60);
-    } else {
-      setTimeLeft(longBreak * 60);
+  // Play sound when timer completes
+  useEffect(() => {
+    if (timeLeft === 0 && isRunning) {
+      playNotificationSound();
     }
-  };
-
-  const switchMode = (newMode: TimerMode) => {
-    setIsRunning(false);
-    setMode(newMode);
-    if (newMode === 'work') {
-      setTimeLeft(workTime * 60);
-    } else if (newMode === 'shortBreak') {
-      setTimeLeft(shortBreak * 60);
-    } else {
-      setTimeLeft(longBreak * 60);
-    }
-  };
+  }, [timeLeft, isRunning]);
 
   const handleSaveSettings = (newWorkTime: number, newShortBreak: number, newLongBreak: number) => {
-    setWorkTime(newWorkTime);
-    setShortBreak(newShortBreak);
-    setLongBreak(newLongBreak);
-    
-    // Update current timer if it's not running
-    if (!isRunning) {
-      if (mode === 'work') {
-        setTimeLeft(newWorkTime * 60);
-      } else if (mode === 'shortBreak') {
-        setTimeLeft(newShortBreak * 60);
-      } else {
-        setTimeLeft(newLongBreak * 60);
-      }
-    }
+    updateSettings(newWorkTime, newShortBreak, newLongBreak);
   };
 
   const getProgress = () => {
