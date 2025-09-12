@@ -113,7 +113,9 @@ export default function Home() {
         
         {/* Large Clock - 70% of screen */}
         <div className="w-full h-[70vh] flex flex-col items-center justify-center">
-          <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={true} />
+          <div className="scale-[2] sm:scale-[2.5] md:scale-[3]">
+            <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={true} />
+          </div>
         </div>
         
         {/* Small Control Buttons */}
