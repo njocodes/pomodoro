@@ -26,7 +26,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(3, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const timeString = formatTime(displayTime);
@@ -117,6 +117,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         
         {/* Minutes - Second Digit */}
         <FlipDigit digit={minutes[1]} keyPrefix={`min2-${flipKey}`} />
+        
+        {/* Minutes - Third Digit */}
+        <FlipDigit digit={minutes[2]} keyPrefix={`min3-${flipKey}`} />
         
         {/* Colon */}
         <div className={`text-3xl font-bold mx-3 flex flex-col items-center ${
