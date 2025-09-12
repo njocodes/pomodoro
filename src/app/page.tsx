@@ -59,15 +59,16 @@ export default function Home() {
   // Handle spacebar for fullscreen toggle
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.code === 'Space') {
+      if (event.code === 'Space' && !showSettings) {
         event.preventDefault();
+        event.stopPropagation();
         setIsFullscreen(prev => !prev);
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+    document.addEventListener('keydown', handleKeyPress, true);
+    return () => document.removeEventListener('keydown', handleKeyPress, true);
+  }, [showSettings]);
 
   // Handle touch to start/stop on mobile
   const handleTouchStart = () => {

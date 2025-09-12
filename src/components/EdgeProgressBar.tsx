@@ -24,7 +24,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
   return (
     <>
       {/* Top section - center to edges */}
-      <div className="fixed top-0 left-1/2 transform -translate-x-1/2 w-1 h-8 z-10">
+      <div className="fixed top-0 left-1/2 transform -translate-x-1/2 w-2 h-12 z-10">
         <div 
           className={`w-full transition-all duration-1000 ease-out ${
             theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
@@ -40,7 +40,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
       </div>
 
       {/* Right section - top to bottom */}
-      <div className="fixed right-0 top-8 w-1 h-[calc(100vh-16rem)] z-10">
+      <div className="fixed right-0 top-12 w-2 h-[calc(100vh-12rem)] z-10">
         <div 
           className={`w-full transition-all duration-1000 ease-out ${
             theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
@@ -56,7 +56,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
       </div>
 
       {/* Bottom section - edges to center */}
-      <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-8 z-10">
+      <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-12 z-10">
         <div 
           className={`w-full transition-all duration-1000 ease-out ${
             theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
@@ -72,7 +72,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
       </div>
 
       {/* Left section - bottom to top */}
-      <div className="fixed left-0 top-8 w-1 h-[calc(100vh-16rem)] z-10">
+      <div className="fixed left-0 top-12 w-2 h-[calc(100vh-12rem)] z-10">
         <div 
           className={`w-full transition-all duration-1000 ease-out ${
             theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
