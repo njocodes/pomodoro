@@ -148,80 +148,89 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-8">Pomodoro Timer</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-center p-4">
+      <div className="text-center max-w-4xl mx-auto">
+        <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-red-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+          Pomodoro Timer
+        </h1>
+        <p className="text-gray-400 text-lg mb-12">Fokussiere dich, arbeite produktiv</p>
         
         {/* Mode selector */}
-        <div className="flex justify-center space-x-4 mb-8">
+        <div className="flex justify-center space-x-3 mb-12">
           <button
             onClick={() => switchMode('work')}
-            className={`px-4 py-2 rounded-lg transition-colors ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'work' 
-                ? 'bg-red-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/25' 
+                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            Arbeit
+            ⚡ Arbeit
           </button>
           <button
             onClick={() => switchMode('shortBreak')}
-            className={`px-4 py-2 rounded-lg transition-colors ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'shortBreak' 
-                ? 'bg-green-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-green-500/25' 
+                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            Kurze Pause
+            ☕ Kurze Pause
           </button>
           <button
             onClick={() => switchMode('longBreak')}
-            className={`px-4 py-2 rounded-lg transition-colors ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
               mode === 'longBreak' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-500/25' 
+                : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 backdrop-blur-sm border border-gray-600/50'
             }`}
           >
-            Lange Pause
+            🍃 Lange Pause
           </button>
         </div>
 
         {/* Timer display */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-300">{getModeText()}</h2>
-          <FlippingClock timeLeft={timeLeft} />
-          <ProgressBar progress={getProgress()} color={getProgressColor()} />
+        <div className="mb-12">
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-3xl p-8 border border-gray-700/50 shadow-2xl">
+            <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+              {getModeText()}
+            </h2>
+            <FlippingClock timeLeft={timeLeft} />
+            <ProgressBar progress={getProgress()} color={getProgressColor()} />
+          </div>
         </div>
 
         {/* Controls */}
-        <div className="flex justify-center space-x-4 mb-8">
+        <div className="flex justify-center space-x-4 mb-12">
           <button
             onClick={toggleTimer}
-            className={`px-8 py-3 rounded-lg font-semibold transition-colors ${
+            className={`px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl ${
               isRunning 
-                ? 'bg-yellow-600 hover:bg-yellow-700' 
-                : 'bg-green-600 hover:bg-green-700'
+                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-yellow-500/25' 
+                : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-green-500/25'
             }`}
           >
-            {isRunning ? 'Pause' : 'Start'}
+            {isRunning ? '⏸️ Pause' : '▶️ Start'}
           </button>
           <button
             onClick={resetTimer}
-            className="px-8 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-semibold transition-colors"
+            className="px-10 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl text-white"
           >
-            Reset
+            🔄 Reset
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className="px-8 py-3 bg-gray-600 hover:bg-gray-700 rounded-lg font-semibold transition-colors"
+            className="px-10 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl text-white shadow-purple-500/25"
           >
-            Einstellungen
+            ⚙️ Einstellungen
           </button>
         </div>
 
         {/* Pomodoro counter */}
-        <div className="text-lg text-gray-300">
-          Pomodoros heute: <span className="font-bold text-red-400">{pomodoroCount}</span>
+        <div className="bg-gray-800/20 backdrop-blur-sm rounded-2xl px-8 py-4 border border-gray-700/30">
+          <div className="text-xl font-semibold text-gray-300">
+            🍅 Pomodoros heute: <span className="font-bold bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent">{pomodoroCount}</span>
+          </div>
         </div>
       </div>
 
