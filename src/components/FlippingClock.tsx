@@ -77,16 +77,16 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
   const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
       <div className="relative w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 overflow-hidden">
-        {/* Bottom half - shows bottom part of current digit */}
+        {/* Bottom half - shows bottom 45% of current digit */}
         <div 
-          className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md shadow-xl border-t ${
+          className={`absolute bottom-0 left-0 right-0 h-[45%] rounded-b-md shadow-xl border-t ${
             theme === 'light'
               ? 'bg-white text-gray-900 border-gray-300'
               : 'bg-gray-800 text-gray-100 border-gray-700'
           }`}
         >
           <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
-            <div className="transform -translate-y-1">
+            <div className="transform -translate-y-2">
               {digit}
             </div>
             <div className={`absolute bottom-0 left-0 right-0 h-1/2 rounded-b-md ${
@@ -100,14 +100,14 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
         {/* Background new digit - shows behind flipping old digit */}
         {isFlipping && (
           <div 
-            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
+            className={`absolute top-0 left-0 right-0 h-[45%] rounded-t-md shadow-xl border-b ${
               theme === 'light'
                 ? 'bg-white text-gray-900 border-gray-300'
                 : 'bg-gray-800 text-gray-100 border-gray-700'
             }`}
           >
             <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
-              <div className="transform translate-y-1">
+              <div className="transform translate-y-2">
                 {digit}
               </div>
               <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
@@ -119,9 +119,9 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           </div>
         )}
         
-        {/* Top half - shows old digit and flips */}
+        {/* Top half - shows top 45% of digit and flips */}
         <div 
-          className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
+          className={`absolute top-0 left-0 right-0 h-[45%] rounded-t-md shadow-xl border-b ${
             theme === 'light'
               ? 'bg-white text-gray-900 border-gray-300'
               : 'bg-gray-800 text-gray-100 border-gray-700'
@@ -133,7 +133,7 @@ export default function FlippingClock({ timeLeft, theme }: FlippingClockProps) {
           }}
         >
           <div className="flex items-center justify-center h-full text-3xl sm:text-4xl md:text-5xl font-bold relative overflow-hidden">
-            <div className="transform translate-y-1">
+            <div className="transform translate-y-2">
               {isFlipping ? (oldDigit || digit) : digit}
             </div>
             <div className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md ${
