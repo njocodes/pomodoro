@@ -122,7 +122,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         {/* Flipping animation layer */}
         {isFlipping && oldDigit && (
           <div 
-            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md shadow-xl border-b ${
+            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md border-b ${
               theme === 'light'
                 ? 'bg-white text-gray-900 border-gray-300'
                 : 'bg-gray-800 text-gray-100 border-gray-700'
@@ -130,7 +130,10 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
             style={{
               transformOrigin: 'bottom',
               transformStyle: 'preserve-3d',
-              animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards'
+              animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
+              boxShadow: theme === 'light' 
+                ? '0 4px 8px rgba(0, 0, 0, 0.2), 8px 0 16px rgba(0, 0, 0, 0.1)' 
+                : '0 4px 8px rgba(255, 255, 255, 0.2), 8px 0 16px rgba(255, 255, 255, 0.1)'
             }}
           >
             <div className="flex items-end justify-center h-full overflow-hidden">
@@ -149,6 +152,22 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         <div className={`absolute -bottom-1 left-0 right-0 h-1 rounded-full shadow-lg ${
           theme === 'light' ? 'bg-gray-300' : 'bg-gray-900'
         }`}></div>
+        
+        {/* Flipping shadow - shows when card extends to the right */}
+        {isFlipping && (
+          <div 
+            className={`absolute top-0 left-full w-2 h-1/2 rounded-r-md ${
+              theme === 'light' 
+                ? 'bg-gray-200 shadow-lg' 
+                : 'bg-gray-700 shadow-lg'
+            }`}
+            style={{
+              boxShadow: theme === 'light' 
+                ? '4px 0 8px rgba(0, 0, 0, 0.15)' 
+                : '4px 0 8px rgba(255, 255, 255, 0.15)'
+            }}
+          />
+        )}
       </div>
     );
   };
@@ -160,14 +179,8 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
           0% {
             transform: rotateX(0deg) translateX(0px);
           }
-          25% {
-            transform: rotateX(-45deg) translateX(4px);
-          }
           50% {
-            transform: rotateX(-90deg) translateX(12px);
-          }
-          75% {
-            transform: rotateX(-135deg) translateX(4px);
+            transform: rotateX(-90deg) translateX(10px);
           }
           100% {
             transform: rotateX(-180deg) translateX(0px);
