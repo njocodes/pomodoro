@@ -122,7 +122,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         {/* Flipping animation layer */}
         {isFlipping && oldDigit && (
           <div 
-            className={`absolute top-0 left-0 right-0 h-1/2 rounded-t-md border-b ${
+            className={`absolute top-0 left-0 h-1/2 rounded-t-md border-b ${
               theme === 'light'
                 ? 'bg-white text-gray-900 border-gray-300'
                 : 'bg-gray-800 text-gray-100 border-gray-700'
@@ -152,22 +152,6 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         <div className={`absolute -bottom-1 left-0 right-0 h-1 rounded-full shadow-lg ${
           theme === 'light' ? 'bg-gray-300' : 'bg-gray-900'
         }`}></div>
-        
-        {/* Flipping shadow - shows when card extends to the right */}
-        {isFlipping && (
-          <div 
-            className={`absolute top-0 left-full w-2 h-1/2 rounded-r-md ${
-              theme === 'light' 
-                ? 'bg-gray-200 shadow-lg' 
-                : 'bg-gray-700 shadow-lg'
-            }`}
-            style={{
-              boxShadow: theme === 'light' 
-                ? '4px 0 8px rgba(0, 0, 0, 0.15)' 
-                : '4px 0 8px rgba(255, 255, 255, 0.15)'
-            }}
-          />
-        )}
       </div>
     );
   };
@@ -177,13 +161,16 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
       <style jsx>{`
         @keyframes flipDown {
           0% {
-            transform: rotateX(0deg) translateX(0px);
+            transform: rotateX(0deg);
+            width: 100%;
           }
           50% {
-            transform: rotateX(-90deg) translateX(10px);
+            transform: rotateX(-90deg);
+            width: 120%;
           }
           100% {
-            transform: rotateX(-180deg) translateX(0px);
+            transform: rotateX(-180deg);
+            width: 100%;
           }
         }
       `}</style>
