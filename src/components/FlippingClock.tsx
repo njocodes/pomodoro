@@ -132,8 +132,8 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
               transformStyle: 'preserve-3d',
               animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
               boxShadow: theme === 'light' 
-                ? '0 4px 8px rgba(0, 0, 0, 0.2), 8px 0 16px rgba(0, 0, 0, 0.1)' 
-                : '0 4px 8px rgba(255, 255, 255, 0.2), 8px 0 16px rgba(255, 255, 255, 0.1)'
+                ? '0 4px 12px rgba(0, 0, 0, 0.3), 6px 0 20px rgba(0, 0, 0, 0.2), 12px 0 8px rgba(0, 0, 0, 0.1)' 
+                : '0 4px 12px rgba(255, 255, 255, 0.3), 6px 0 20px rgba(255, 255, 255, 0.2), 12px 0 8px rgba(255, 255, 255, 0.1)'
             }}
           >
             <div className="flex items-end justify-center h-full overflow-hidden">
@@ -149,9 +149,15 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         )}
         
         {/* Base shadow */}
-        <div className={`absolute -bottom-1 left-0 right-0 h-1 rounded-full shadow-lg ${
-          theme === 'light' ? 'bg-gray-300' : 'bg-gray-900'
-        }`}></div>
+        <div className={`absolute -bottom-2 left-0 right-0 h-2 rounded-full ${
+          theme === 'light' 
+            ? 'bg-gray-300 shadow-lg' 
+            : 'bg-gray-900 shadow-lg'
+        }`} style={{
+          boxShadow: theme === 'light'
+            ? '0 6px 16px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15)'
+            : '0 6px 16px rgba(255, 255, 255, 0.25), 0 2px 8px rgba(255, 255, 255, 0.15)'
+        }}></div>
       </div>
     );
   };
