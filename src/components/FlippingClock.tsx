@@ -89,6 +89,13 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
               ? 'bg-white text-gray-900 border border-gray-300'
               : 'bg-gray-800 text-gray-100 border border-gray-700'
           }`}
+          style={{ 
+            transformStyle: 'preserve-3d',
+            transform: 'translateZ(2px)',
+            boxShadow: theme === 'light' 
+              ? '2px 2px 8px rgba(0, 0, 0, 0.1)' 
+              : '2px 2px 8px rgba(255, 255, 255, 0.1)'
+          }}
         >
           {/* Top half of digit */}
           <div className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center overflow-hidden">
@@ -129,6 +136,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
             style={{
               transform: 'rotateX(-180deg)',
               transformOrigin: 'bottom',
+              transformStyle: 'preserve-3d',
               animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards'
             }}
           >
@@ -157,17 +165,20 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
       <style jsx>{`
         @keyframes flipDown {
           0% {
-            transform: rotateX(0deg);
+            transform: rotateX(0deg) translateZ(0px);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
           }
           50% {
-            transform: rotateX(-90deg);
+            transform: rotateX(-90deg) translateZ(8px);
+            box-shadow: 8px 0 16px rgba(0, 0, 0, 0.3);
           }
           100% {
-            transform: rotateX(-180deg);
+            transform: rotateX(-180deg) translateZ(0px);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
           }
         }
       `}</style>
-      <div className="flex items-center justify-center space-x-2 sm:space-x-3 md:space-x-4">
+      <div className="flex items-center justify-center space-x-2 sm:space-x-3 md:space-x-4" style={{ perspective: '1000px' }}>
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
