@@ -122,7 +122,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         {/* Flipping animation layer */}
         {isFlipping && oldDigit && (
           <div 
-            className={`absolute top-0 left-0 h-1/2 rounded-t-md border-b ${
+            className={`absolute top-0 left-0 h-1/2 rounded-t-md border border-b-2 ${
               theme === 'light'
                 ? 'bg-white text-gray-900 border-gray-300'
                 : 'bg-gray-800 text-gray-100 border-gray-700'
