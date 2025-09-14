@@ -13,7 +13,7 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
   // Calculate progress for each half of the perimeter
   // Each half is 200 units long, so we need to map progress to 0-200 for each half
   const halfLength = 200;
-  const halfProgress = Math.min(progress * 2, 100); // Double the progress for each half
+  const halfProgress = progress; // Use the progress directly (0-100%)
   const strokeDashoffset = halfLength - (halfProgress * halfLength / 100);
 
   return (
