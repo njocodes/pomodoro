@@ -3,9 +3,10 @@
 interface EdgeProgressBarProps {
   progress: number; // 0-100
   theme: 'light' | 'dark';
+  isCompleted?: boolean; // New prop to trigger expansion effect
 }
 
-export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProps) {
+export default function EdgeProgressBar({ progress, theme, isCompleted = false }: EdgeProgressBarProps) {
   const progressColor = theme === 'light' ? '#d1d5db' : '#6b7280'; // Light mode: light gray for filled, Dark mode: lighter gray for filled
   const backgroundColor = theme === 'light' ? '#111827' : '#000000'; // Light mode: dark background for unfilled, Dark mode: black background for unfilled
 
@@ -35,12 +36,14 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
-          strokeWidth="1"
+          strokeWidth={isCompleted ? "5" : "1"}
           fill="none"
           strokeDasharray="200"
           strokeDashoffset={200 - (progress * 2)}
           style={{
-            transition: 'stroke-dashoffset 1s ease-out'
+            transition: isCompleted 
+              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
+              : 'stroke-dashoffset 1s ease-out'
           }}
         />
         
@@ -48,12 +51,14 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
           stroke={progressColor}
-          strokeWidth="1"
+          strokeWidth={isCompleted ? "5" : "1"}
           fill="none"
           strokeDasharray="200"
           strokeDashoffset={200 - (progress * 2)}
           style={{
-            transition: 'stroke-dashoffset 1s ease-out'
+            transition: isCompleted 
+              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
+              : 'stroke-dashoffset 1s ease-out'
           }}
         />
       </svg>

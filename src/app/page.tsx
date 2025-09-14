@@ -16,6 +16,7 @@ export default function Home() {
   const { theme } = useTheme();
   const [showSettings, setShowSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const isMobile = useIsMobile();
   
   const {
@@ -52,6 +53,14 @@ export default function Home() {
   // Play sound when timer completes
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
+      // Trigger completion effect
+      setIsCompleted(true);
+      
+      // Reset completion effect after 2 seconds
+      setTimeout(() => {
+        setIsCompleted(false);
+      }, 2000);
+      
       playNotificationSound();
     }
   }, [timeLeft, isRunning]);
@@ -111,7 +120,7 @@ export default function Home() {
           : 'bg-black text-white'
       }`}>
         {/* Edge Progress Bars */}
-        <EdgeProgressBar progress={getProgress()} theme={theme} />
+        <EdgeProgressBar progress={getProgress()} theme={theme} isCompleted={isCompleted} />
         
         {/* Large Clock - 70% of screen */}
         <div className="w-full h-[70vh] flex flex-col items-center justify-center">
