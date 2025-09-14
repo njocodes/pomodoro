@@ -171,6 +171,16 @@ export default function Home() {
         }`}>
           Leertaste für Vollbildmodus
         </div>
+        
+        {/* Settings Modal for fullscreen */}
+        <SettingsModal
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+          workTime={workTime}
+          shortBreak={shortBreak}
+          longBreak={longBreak}
+          onSave={handleSaveSettings}
+        />
       </div>
     );
   }
