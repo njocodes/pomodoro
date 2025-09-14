@@ -27,18 +27,31 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={backgroundColor}
-          strokeWidth="0.5"
+          strokeWidth="1.5"
           fill="none"
         />
         
-        {/* Progress path - animated based on progress */}
+        {/* Progress path - right side (from center to right, then down, then left) */}
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
-          strokeWidth="0.5"
+          strokeWidth="1.5"
           fill="none"
-          strokeDasharray="400"
-          strokeDashoffset={400 - (progress * 4)}
+          strokeDasharray="200"
+          strokeDashoffset={200 - (progress * 2)}
+          style={{
+            transition: 'stroke-dashoffset 1s ease-out'
+          }}
+        />
+        
+        {/* Progress path - left side (from center to left, then down, then right) */}
+        <path
+          d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
+          stroke={progressColor}
+          strokeWidth="1.5"
+          fill="none"
+          strokeDasharray="200"
+          strokeDashoffset={200 - (progress * 2)}
           style={{
             transition: 'stroke-dashoffset 1s ease-out'
           }}
