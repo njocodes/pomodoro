@@ -6,86 +6,44 @@ interface EdgeProgressBarProps {
 }
 
 export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProps) {
-  // Calculate progress for each section of the perimeter
-  const totalProgress = progress;
-  
-  // Top section: center to edges (0-25%)
-  const topProgress = Math.min(100, Math.max(0, (totalProgress / 25) * 100));
-  
-  // Right section: top to bottom (25-50%)
-  const rightProgress = Math.min(100, Math.max(0, ((totalProgress - 25) / 25) * 100));
-  
-  // Bottom section: edges to center (50-75%)
-  const bottomProgress = Math.min(100, Math.max(0, ((totalProgress - 50) / 25) * 100));
-  
-  // Left section: bottom to top (75-100%)
-  const leftProgress = Math.min(100, Math.max(0, ((totalProgress - 75) / 25) * 100));
+  const progressColor = theme === 'light' ? '#111827' : '#ffffff';
+  const backgroundColor = theme === 'light' ? '#d1d5db' : '#4b5563';
 
   return (
-    <>
-      {/* Top section - center to edges */}
-      <div className="fixed top-0 left-1/2 transform -translate-x-1/2 w-2 h-12 z-10">
-        <div 
-          className={`w-full transition-all duration-1000 ease-out ${
-            theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
-          }`}
-          style={{ height: `${100 - topProgress}%` }}
+    <div className="fixed inset-0 pointer-events-none z-10">
+      <svg 
+        className="w-full h-full" 
+        viewBox="0 0 100 100" 
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={progressColor} />
+            <stop offset="100%" stopColor={progressColor} />
+          </linearGradient>
+        </defs>
+        
+        {/* Background path - full perimeter */}
+        <path
+          d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
+          stroke={backgroundColor}
+          strokeWidth="0.5"
+          fill="none"
         />
-        <div 
-          className={`w-full ${
-            theme === 'light' ? 'bg-gray-900' : 'bg-white'
-          }`}
-          style={{ height: `${topProgress}%` }}
+        
+        {/* Progress path - animated based on progress */}
+        <path
+          d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
+          stroke={progressColor}
+          strokeWidth="0.5"
+          fill="none"
+          strokeDasharray="400"
+          strokeDashoffset={400 - (progress * 4)}
+          style={{
+            transition: 'stroke-dashoffset 1s ease-out'
+          }}
         />
-      </div>
-
-      {/* Right section - top to bottom */}
-      <div className="fixed right-0 top-12 w-2 h-[calc(100vh-12rem)] z-10">
-        <div 
-          className={`w-full transition-all duration-1000 ease-out ${
-            theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
-          }`}
-          style={{ height: `${100 - rightProgress}%` }}
-        />
-        <div 
-          className={`w-full ${
-            theme === 'light' ? 'bg-gray-900' : 'bg-white'
-          }`}
-          style={{ height: `${rightProgress}%` }}
-        />
-      </div>
-
-      {/* Bottom section - edges to center */}
-      <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-12 z-10">
-        <div 
-          className={`w-full transition-all duration-1000 ease-out ${
-            theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
-          }`}
-          style={{ height: `${100 - bottomProgress}%` }}
-        />
-        <div 
-          className={`w-full ${
-            theme === 'light' ? 'bg-gray-900' : 'bg-white'
-          }`}
-          style={{ height: `${bottomProgress}%` }}
-        />
-      </div>
-
-      {/* Left section - bottom to top */}
-      <div className="fixed left-0 top-12 w-2 h-[calc(100vh-12rem)] z-10">
-        <div 
-          className={`w-full transition-all duration-1000 ease-out ${
-            theme === 'light' ? 'bg-gray-300' : 'bg-gray-700'
-          }`}
-          style={{ height: `${100 - leftProgress}%` }}
-        />
-        <div 
-          className={`w-full ${
-            theme === 'light' ? 'bg-gray-900' : 'bg-white'
-          }`}
-          style={{ height: `${leftProgress}%` }}
-        />
-      </div>
-    </>
+      </svg>
+    </div>
   );
 }
