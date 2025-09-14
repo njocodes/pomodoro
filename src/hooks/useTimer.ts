@@ -125,39 +125,55 @@ export function useTimer() {
   }, [timerState.isRunning, updateTimerState]);
 
   const resetTimer = useCallback(() => {
-    const timeLeft = timerState.mode === 'work' ? timerState.workTime * 60 :
-                    timerState.mode === 'shortBreak' ? timerState.shortBreak * 60 :
-                    timerState.longBreak * 60;
-    
-    updateTimerState({ 
-      timeLeft, 
-      isRunning: false 
+    updateTimerState(currentState => {
+      const timeLeft = currentState.mode === 'work' ? currentState.workTime * 60 :
+                      currentState.mode === 'shortBreak' ? currentState.shortBreak * 60 :
+                      currentState.longBreak * 60;
+      
+      return { 
+        ...currentState,
+        timeLeft, 
+        isRunning: false 
+      };
     });
-  }, [timerState.mode, timerState.workTime, timerState.shortBreak, timerState.longBreak, updateTimerState]);
+  }, [updateTimerState]);
 
   const switchMode = useCallback((newMode: TimerMode) => {
-    const timeLeft = newMode === 'work' ? timerState.workTime * 60 :
-                    newMode === 'shortBreak' ? timerState.shortBreak * 60 :
-                    timerState.longBreak * 60;
-    
-    updateTimerState({ 
-      mode: newMode, 
-      timeLeft, 
-      isRunning: false 
+    // Use the current state values to ensure we get the latest settings
+    updateTimerState(currentState => {
+      const timeLeft = newMode === 'work' ? currentState.workTime * 60 :
+                      newMode === 'shortBreak' ? currentState.shortBreak * 60 :
+                      currentState.longBreak * 60;
+      
+      return { 
+        ...currentState,
+        mode: newMode, 
+        timeLeft, 
+        isRunning: false 
+      };
     });
-  }, [timerState.workTime, timerState.shortBreak, timerState.longBreak, updateTimerState]);
+  }, [updateTimerState]);
 
   const updateSettings = useCallback((workTime: number, shortBreak: number, longBreak: number) => {
-    updateTimerState({ workTime, shortBreak, longBreak });
-    
-    // Update current timer if not running
-    if (!timerState.isRunning) {
-      const timeLeft = timerState.mode === 'work' ? workTime * 60 :
-                      timerState.mode === 'shortBreak' ? shortBreak * 60 :
-                      longBreak * 60;
-      updateTimerState({ timeLeft });
-    }
-  }, [timerState.isRunning, timerState.mode, updateTimerState]);
+    updateTimerState(currentState => {
+      const newState = { 
+        ...currentState,
+        workTime, 
+        shortBreak, 
+        longBreak 
+      };
+      
+      // Update current timer if not running
+      if (!currentState.isRunning) {
+        const timeLeft = currentState.mode === 'work' ? workTime * 60 :
+                        currentState.mode === 'shortBreak' ? shortBreak * 60 :
+                        longBreak * 60;
+        newState.timeLeft = timeLeft;
+      }
+      
+      return newState;
+    });
+  }, [updateTimerState]);
 
   return {
     ...timerState,
