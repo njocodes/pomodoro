@@ -85,7 +85,7 @@ export default function SettingsModal({
               type="number"
               min="1"
               max="60"
-              value={localWorkTime}
+              value={localWorkTime === 0 ? '' : localWorkTime}
               onChange={(e) => {
                 const value = e.target.value;
                 if (value === '') {
@@ -116,7 +116,7 @@ export default function SettingsModal({
               type="number"
               min="1"
               max="30"
-              value={localShortBreak}
+              value={localShortBreak === 0 ? '' : localShortBreak}
               onChange={(e) => {
                 const value = e.target.value;
                 if (value === '') {
@@ -147,7 +147,7 @@ export default function SettingsModal({
               type="number"
               min="1"
               max="60"
-              value={localLongBreak}
+              value={localLongBreak === 0 ? '' : localLongBreak}
               onChange={(e) => {
                 const value = e.target.value;
                 if (value === '') {
