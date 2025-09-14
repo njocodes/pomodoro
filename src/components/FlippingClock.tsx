@@ -121,31 +121,51 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         
         {/* Flipping animation layer */}
         {isFlipping && oldDigit && (
-          <div 
-            className={`absolute top-0 left-0 h-1/2 rounded-t-md border border-b-2 ${
-              theme === 'light'
-                ? 'bg-white text-gray-900 border-gray-300'
-                : 'bg-gray-800 text-gray-100 border-gray-700'
-            }`}
-            style={{
-              transformOrigin: 'bottom',
-              transformStyle: 'preserve-3d',
-              animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
-              boxShadow: theme === 'light' 
-                ? '0 4px 12px rgba(0, 0, 0, 0.3), 6px 0 20px rgba(0, 0, 0, 0.2), 12px 0 8px rgba(0, 0, 0, 0.1)' 
-                : '0 4px 12px rgba(255, 255, 255, 0.3), 6px 0 20px rgba(255, 255, 255, 0.2), 12px 0 8px rgba(255, 255, 255, 0.1)'
-            }}
-          >
-            <div className="flex items-end justify-center h-full overflow-hidden">
-              <div className={`font-bold transform translate-y-1/2 ${
-                isFullscreen 
-                  ? 'text-4xl sm:text-5xl md:text-6xl'
-                  : 'text-3xl sm:text-4xl md:text-5xl'
-              }`}>
-                {oldDigit}
+          <>
+            {/* Extended border for the expanding card */}
+            <div 
+              className={`absolute top-0 left-0 h-1/2 rounded-t-md ${
+                theme === 'light'
+                  ? 'border-2 border-gray-300'
+                  : 'border-2 border-gray-700'
+              }`}
+              style={{
+                transformOrigin: 'bottom',
+                transformStyle: 'preserve-3d',
+                animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
+                borderBottomWidth: '3px',
+                zIndex: 1
+              }}
+            />
+            
+            {/* Main flipping card */}
+            <div 
+              className={`absolute top-0 left-0 h-1/2 rounded-t-md ${
+                theme === 'light'
+                  ? 'bg-white text-gray-900'
+                  : 'bg-gray-800 text-gray-100'
+              }`}
+              style={{
+                transformOrigin: 'bottom',
+                transformStyle: 'preserve-3d',
+                animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
+                boxShadow: theme === 'light' 
+                  ? '0 4px 12px rgba(0, 0, 0, 0.3), 6px 0 20px rgba(0, 0, 0, 0.2), 12px 0 8px rgba(0, 0, 0, 0.1)' 
+                  : '0 4px 12px rgba(255, 255, 255, 0.3), 6px 0 20px rgba(255, 255, 255, 0.2), 12px 0 8px rgba(255, 255, 255, 0.1)',
+                zIndex: 2
+              }}
+            >
+              <div className="flex items-end justify-center h-full overflow-hidden">
+                <div className={`font-bold transform translate-y-1/2 ${
+                  isFullscreen 
+                    ? 'text-4xl sm:text-5xl md:text-6xl'
+                    : 'text-3xl sm:text-4xl md:text-5xl'
+                }`}>
+                  {oldDigit}
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
         
         {/* Base shadow */}
