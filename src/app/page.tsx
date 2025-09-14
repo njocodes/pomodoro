@@ -99,11 +99,11 @@ export default function Home() {
 
   const getProgressColor = () => {
     if (theme === 'light') {
-      return mode === 'work' ? 'bg-red-500' : 
-             mode === 'shortBreak' ? 'bg-green-500' : 'bg-blue-500';
+      return mode === 'work' ? 'bg-gray-900' : 
+             mode === 'shortBreak' ? 'bg-gray-900' : 'bg-gray-900';
     } else {
-      return mode === 'work' ? 'bg-gray-600' : 
-             mode === 'shortBreak' ? 'bg-gray-500' : 'bg-gray-700';
+      return mode === 'work' ? 'bg-white' : 
+             mode === 'shortBreak' ? 'bg-white' : 'bg-white';
     }
   };
 
@@ -113,7 +113,7 @@ export default function Home() {
   };
 
   if (isFullscreen) {
-    return (
+  return (
       <div className={`fixed inset-0 flex flex-col items-center justify-center ${
         theme === 'light' 
           ? 'bg-gray-100 text-gray-900' 

@@ -58,7 +58,7 @@ export default function CornerDropdown({ onReset, onSettings, theme }: CornerDro
             }`}
             title="Einstellungen"
           >
-            ⚙️
+            ⚙
           </button>
         </div>
       )}

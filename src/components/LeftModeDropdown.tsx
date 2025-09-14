@@ -32,7 +32,7 @@ export default function LeftModeDropdown({ mode, onModeChange, theme }: LeftMode
             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
         }`}
       >
-        <span className="text-lg">{getModeIcon(mode)}</span>
+        <span className="text-sm font-bold">●</span>
         <span>{getModeText(mode)}</span>
         <span className={`transform transition-transform duration-200 ${
           isOpen ? 'rotate-180' : ''
@@ -66,7 +66,7 @@ export default function LeftModeDropdown({ mode, onModeChange, theme }: LeftMode
                       : 'text-gray-300 hover:bg-gray-700'
                 }`}
               >
-                <span className="text-lg">{getModeIcon(modeOption)}</span>
+                <span className="text-sm font-bold">●</span>
                 <span>{getModeText(modeOption)}</span>
               </button>
             ))}
