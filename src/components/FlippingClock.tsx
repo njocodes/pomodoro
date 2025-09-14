@@ -150,8 +150,8 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
                 transformStyle: 'preserve-3d',
                 animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
                 boxShadow: theme === 'light' 
-                  ? '0 4px 12px rgba(0, 0, 0, 0.3), 6px 0 20px rgba(0, 0, 0, 0.2), 12px 0 8px rgba(0, 0, 0, 0.1)' 
-                  : '0 4px 12px rgba(255, 255, 255, 0.3), 6px 0 20px rgba(255, 255, 255, 0.2), 12px 0 8px rgba(255, 255, 255, 0.1)',
+                  ? '0 2px 8px rgba(0, 0, 0, 0.2), 4px 0 12px rgba(0, 0, 0, 0.15), 8px 0 6px rgba(0, 0, 0, 0.08)' 
+                  : '0 2px 8px rgba(255, 255, 255, 0.2), 4px 0 12px rgba(255, 255, 255, 0.15), 8px 0 6px rgba(255, 255, 255, 0.08)',
                 zIndex: 2
               }}
             >
