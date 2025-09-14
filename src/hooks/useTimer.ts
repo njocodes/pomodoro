@@ -47,33 +47,6 @@ export function useTimer() {
     }
   }, [setTimerState]);
 
-  // Handle timer completion
-  const handleTimerComplete = useCallback(() => {
-    setTimerState(prev => {
-      if (prev.mode === 'work') {
-        const newPomodoroCount = prev.pomodoroCount + 1;
-        const newMode = newPomodoroCount % 4 === 0 ? 'longBreak' : 'shortBreak';
-        const newTimeLeft = newMode === 'longBreak' ? prev.longBreak * 60 : prev.shortBreak * 60;
-        
-        return {
-          ...prev,
-          isRunning: false,
-          pomodoroCount: newPomodoroCount,
-          mode: newMode,
-          timeLeft: newTimeLeft,
-          lastUpdate: Date.now()
-        };
-      } else {
-        return {
-          ...prev,
-          isRunning: false,
-          mode: 'work',
-          timeLeft: prev.workTime * 60,
-          lastUpdate: Date.now()
-        };
-      }
-    });
-  }, [setTimerState]);
 
   // Timer logic
   useEffect(() => {
@@ -84,13 +57,29 @@ export function useTimer() {
           const newTimeLeft = Math.max(0, prev.timeLeft - elapsed);
           
           if (newTimeLeft <= 0) {
-            // Timer finished - trigger completion
-            handleTimerComplete();
-            return {
-              ...prev,
-              timeLeft: 0,
-              lastUpdate: Date.now()
-            };
+            // Timer finished - handle completion
+            if (prev.mode === 'work') {
+              const newPomodoroCount = prev.pomodoroCount + 1;
+              const newMode = newPomodoroCount % 4 === 0 ? 'longBreak' : 'shortBreak';
+              const timeLeft = newMode === 'longBreak' ? prev.longBreak * 60 : prev.shortBreak * 60;
+              
+              return {
+                ...prev,
+                isRunning: false,
+                pomodoroCount: newPomodoroCount,
+                mode: newMode,
+                timeLeft,
+                lastUpdate: Date.now()
+              };
+            } else {
+              return {
+                ...prev,
+                isRunning: false,
+                mode: 'work',
+                timeLeft: prev.workTime * 60,
+                lastUpdate: Date.now()
+              };
+            }
           }
           
           return {
@@ -113,12 +102,6 @@ export function useTimer() {
     };
   }, [timerState.isRunning, setTimerState]);
 
-  // Check for timer completion
-  useEffect(() => {
-    if (timerState.timeLeft <= 0 && timerState.isRunning) {
-      handleTimerComplete();
-    }
-  }, [timerState.timeLeft, timerState.isRunning, handleTimerComplete]);
 
   // Actions
   const toggleTimer = useCallback(() => {
