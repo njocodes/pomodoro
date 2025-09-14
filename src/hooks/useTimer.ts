@@ -32,12 +32,19 @@ export function useTimer() {
 
 
   // Update timer state
-  const updateTimerState = useCallback((updates: Partial<TimerState>) => {
-    setTimerState(prev => ({
-      ...prev,
-      ...updates,
-      lastUpdate: Date.now()
-    }));
+  const updateTimerState = useCallback((updates: Partial<TimerState> | ((prev: TimerState) => TimerState)) => {
+    if (typeof updates === 'function') {
+      setTimerState(prev => ({
+        ...updates(prev),
+        lastUpdate: Date.now()
+      }));
+    } else {
+      setTimerState(prev => ({
+        ...prev,
+        ...updates,
+        lastUpdate: Date.now()
+      }));
+    }
   }, [setTimerState]);
 
   // Handle timer completion
