@@ -10,10 +10,11 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
   const progressColor = theme === 'light' ? '#d1d5db' : '#6b7280'; // Light mode: light gray for filled, Dark mode: lighter gray for filled
   const backgroundColor = theme === 'light' ? '#111827' : '#000000'; // Light mode: dark background for unfilled, Dark mode: black background for unfilled
   
-  // Calculate stroke dash offset based on progress (0-100%)
-  // Total perimeter is 400 units, so we need to map progress to 0-400
-  const totalLength = 400;
-  const strokeDashoffset = totalLength - (progress * totalLength / 100);
+  // Calculate progress for each half of the perimeter
+  // Each half is 200 units long, so we need to map progress to 0-200 for each half
+  const halfLength = 200;
+  const halfProgress = Math.min(progress * 2, 100); // Double the progress for each half
+  const strokeDashoffset = halfLength - (halfProgress * halfLength / 100);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10">
@@ -37,13 +38,28 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
           fill="none"
         />
         
-        {/* Progress path - single path that goes around the perimeter */}
+        {/* Progress path - right side (from center to right, then down, then left) */}
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
           strokeWidth={isCompleted ? "5" : "1"}
           fill="none"
-          strokeDasharray={totalLength}
+          strokeDasharray={halfLength}
+          strokeDashoffset={strokeDashoffset}
+          style={{
+            transition: isCompleted 
+              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
+              : 'stroke-dashoffset 1s ease-out'
+          }}
+        />
+        
+        {/* Progress path - left side (from center to left, then down, then right) */}
+        <path
+          d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
+          stroke={progressColor}
+          strokeWidth={isCompleted ? "5" : "1"}
+          fill="none"
+          strokeDasharray={halfLength}
           strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
