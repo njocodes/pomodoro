@@ -365,6 +365,7 @@ export default function Home() {
         </>
       )}
 
+      {/* Settings Modal - always rendered */}
       <SettingsModal
         isOpen={showSettings}
         onClose={() => setShowSettings(false)}
