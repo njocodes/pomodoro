@@ -8,7 +8,7 @@ interface EdgeProgressBarProps {
 
 export default function EdgeProgressBar({ progress, theme, isCompleted = false }: EdgeProgressBarProps) {
   const progressColor = theme === 'light' ? '#111827' : '#ffffff'; // Light mode: dark for filled, Dark mode: white for filled
-  const backgroundColor = theme === 'light' ? '#d1d5db' : '#000000'; // Light mode: light gray for unfilled, Dark mode: black for unfilled
+  const backgroundColor = theme === 'light' ? '#f3f4f6' : '#000000'; // Light mode: same as website background, Dark mode: black
   
   // Calculate progress for each half of the perimeter
   // Each half is 200 units long, so we need to map progress to 0-200 for each half
