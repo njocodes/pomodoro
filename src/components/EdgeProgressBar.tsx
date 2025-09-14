@@ -9,6 +9,11 @@ interface EdgeProgressBarProps {
 export default function EdgeProgressBar({ progress, theme, isCompleted = false }: EdgeProgressBarProps) {
   const progressColor = theme === 'light' ? '#d1d5db' : '#6b7280'; // Light mode: light gray for filled, Dark mode: lighter gray for filled
   const backgroundColor = theme === 'light' ? '#111827' : '#000000'; // Light mode: dark background for unfilled, Dark mode: black background for unfilled
+  
+  // Calculate stroke dash offset based on progress (0-100%)
+  // Total perimeter is 400 units, so we need to map progress to 0-400
+  const totalLength = 400;
+  const strokeDashoffset = totalLength - (progress * totalLength / 100);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10">
@@ -32,29 +37,14 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
           fill="none"
         />
         
-        {/* Progress path - right side (from center to right, then down, then left) */}
+        {/* Progress path - single path that goes around the perimeter */}
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
           strokeWidth={isCompleted ? "5" : "1"}
           fill="none"
-          strokeDasharray="200"
-          strokeDashoffset={200 - (progress * 2)}
-          style={{
-            transition: isCompleted 
-              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
-              : 'stroke-dashoffset 1s ease-out'
-          }}
-        />
-        
-        {/* Progress path - left side (from center to left, then down, then right) */}
-        <path
-          d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
-          stroke={progressColor}
-          strokeWidth={isCompleted ? "5" : "1"}
-          fill="none"
-          strokeDasharray="200"
-          strokeDashoffset={200 - (progress * 2)}
+          strokeDasharray={totalLength}
+          strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
               ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
