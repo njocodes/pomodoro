@@ -75,7 +75,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   const minuteDigits = minutes.split('');
   const secondDigits = seconds.padStart(2, '0').split('');
 
-  const FlipDigit = ({ digit, keyPrefix, isFlipping, oldDigit }: { digit: string; keyPrefix: string; isFlipping: boolean; oldDigit?: string }) => {
+  const FlipDigit = ({ digit, isFlipping, oldDigit }: { digit: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
       <div className={`relative overflow-hidden ${
         isFullscreen 
@@ -206,7 +206,6 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
           <FlipDigit 
             key={`min-${index}`}
             digit={digit} 
-            keyPrefix={`min${index}`}
             isFlipping={flippingDigits.has(`min-${index}`)}
             oldDigit={oldDigits.get(`min-${index}`)}
           />
@@ -229,7 +228,6 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
           <FlipDigit 
             key={`sec-${index}`}
             digit={digit} 
-            keyPrefix={`sec${index}`}
             isFlipping={flippingDigits.has(`sec-${index}`)}
             oldDigit={oldDigits.get(`sec-${index}`)}
           />

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import FlippingClock from '@/components/FlippingClock';
 import ProgressBar from '@/components/ProgressBar';
 import EdgeProgressBar from '@/components/EdgeProgressBar';
-import MobileModeDropdown from '@/components/MobileModeDropdown';
 import LeftModeDropdown from '@/components/LeftModeDropdown';
 import CornerDropdown from '@/components/CornerDropdown';
 import SettingsModal from '@/components/SettingsModal';

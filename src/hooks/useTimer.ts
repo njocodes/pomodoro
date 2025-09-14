@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
 type TimerMode = 'work' | 'shortBreak' | 'longBreak';
@@ -30,12 +30,6 @@ export function useTimer() {
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Calculate elapsed time since last update
-  const getElapsedTime = useCallback(() => {
-    const now = Date.now();
-    const elapsed = Math.floor((now - timerState.lastUpdate) / 1000);
-    return timerState.isRunning ? elapsed : 0;
-  }, [timerState.lastUpdate, timerState.isRunning]);
 
   // Update timer state
   const updateTimerState = useCallback((updates: Partial<TimerState>) => {
@@ -72,7 +66,7 @@ export function useTimer() {
         };
       }
     });
-  }, []);
+  }, [setTimerState]);
 
   // Timer logic
   useEffect(() => {
@@ -125,7 +119,7 @@ export function useTimer() {
   }, [timerState.isRunning, updateTimerState]);
 
   const resetTimer = useCallback(() => {
-    updateTimerState(currentState => {
+    updateTimerState((currentState: TimerState) => {
       const timeLeft = currentState.mode === 'work' ? currentState.workTime * 60 :
                       currentState.mode === 'shortBreak' ? currentState.shortBreak * 60 :
                       currentState.longBreak * 60;
@@ -140,7 +134,7 @@ export function useTimer() {
 
   const switchMode = useCallback((newMode: TimerMode) => {
     // Use the current state values to ensure we get the latest settings
-    updateTimerState(currentState => {
+    updateTimerState((currentState: TimerState) => {
       const timeLeft = newMode === 'work' ? currentState.workTime * 60 :
                       newMode === 'shortBreak' ? currentState.shortBreak * 60 :
                       currentState.longBreak * 60;
@@ -155,7 +149,7 @@ export function useTimer() {
   }, [updateTimerState]);
 
   const updateSettings = useCallback((workTime: number, shortBreak: number, longBreak: number) => {
-    updateTimerState(currentState => {
+    updateTimerState((currentState: TimerState) => {
       const newState = { 
         ...currentState,
         workTime, 

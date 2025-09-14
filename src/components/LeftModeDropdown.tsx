@@ -16,10 +16,6 @@ export default function LeftModeDropdown({ mode, onModeChange, theme }: LeftMode
            mode === 'shortBreak' ? 'Kurze Pause' : 'Lange Pause';
   };
 
-  const getModeIcon = (mode: 'work' | 'shortBreak' | 'longBreak') => {
-    return mode === 'work' ? '⚡' : 
-           mode === 'shortBreak' ? '☕' : '🛋️';
-  };
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
