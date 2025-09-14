@@ -27,9 +27,9 @@ export default function SettingsModal({
 
   const handleSave = () => {
     // Use default values if fields are empty or 0
-    const workTime = localWorkTime || 25;
-    const shortBreak = localShortBreak || 5;
-    const longBreak = localLongBreak || 15;
+    const workTime = localWorkTime === 0 ? 25 : localWorkTime;
+    const shortBreak = localShortBreak === 0 ? 5 : localShortBreak;
+    const longBreak = localLongBreak === 0 ? 15 : localLongBreak;
     
     onSave(workTime, shortBreak, longBreak);
     onClose();
