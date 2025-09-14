@@ -6,8 +6,8 @@ interface EdgeProgressBarProps {
 }
 
 export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProps) {
-  const progressColor = theme === 'light' ? '#111827' : '#ffffff';
-  const backgroundColor = theme === 'light' ? '#d1d5db' : '#4b5563';
+  const progressColor = theme === 'light' ? '#111827' : '#6b7280'; // Dark mode: lighter gray for filled
+  const backgroundColor = theme === 'light' ? '#d1d5db' : '#000000'; // Dark mode: black background for unfilled
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10">
@@ -27,7 +27,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={backgroundColor}
-          strokeWidth="1.5"
+          strokeWidth="0.5"
           fill="none"
         />
         
@@ -35,7 +35,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
-          strokeWidth="1.5"
+          strokeWidth="0.5"
           fill="none"
           strokeDasharray="200"
           strokeDashoffset={200 - (progress * 2)}
@@ -48,7 +48,7 @@ export default function EdgeProgressBar({ progress, theme }: EdgeProgressBarProp
         <path
           d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
           stroke={progressColor}
-          strokeWidth="1.5"
+          strokeWidth="0.5"
           fill="none"
           strokeDasharray="200"
           strokeDashoffset={200 - (progress * 2)}
