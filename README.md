@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍅 Pomodoro Timer
 
-## Getting Started
+Ein moderner, responsiver Pomodoro-Timer, der mit Next.js und TypeScript entwickelt wurde. Perfekt für Produktivität und fokussiertes Arbeiten.
 
-First, run the development server:
+## 🚀 Live Demo
+
+**[👉 Live ansehen auf Vercel](https://pomodoro-beta-azure.vercel.app)**
+
+## ✨ Features
+
+- ⏱️ **Klassischer Pomodoro-Timer** - 25 Minuten Arbeit, 5 Minuten Pause
+- 🎯 **Anpassbare Intervalle** - Passe Arbeits- und Pausenzeiten nach deinen Bedürfnissen an
+- 🔔 **Audio-Benachrichtigungen** - Höre, wenn eine Session beendet ist
+- 📱 **Responsive Design** - Funktioniert perfekt auf Desktop und Mobile
+- 🌙 **Dark Mode** - Schonende Augen bei längerer Nutzung
+- 📊 **Session-Tracking** - Verfolge deine Produktivität
+- ⏸️ **Pause/Resume** - Kontrolle über deine Arbeitszeiten
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 14
+- **Sprache:** TypeScript
+- **Styling:** Tailwind CSS
+- **Deployment:** Vercel
+- **Icons:** Lucide React
+
+## 📦 Installation & Setup
+
+### Voraussetzungen
+
+- Node.js 18+ 
+- npm, yarn, pnpm oder bun
+
+### 1. Repository klonen
+
+```bash
+git clone https://github.com/njocodes/pomodoro.git
+cd pomodoro
+```
+
+### 2. Dependencies installieren
+
+```bash
+npm install
+# oder
+yarn install
+# oder
+pnpm install
+# oder
+bun install
+```
+
+### 3. Development Server starten
 
 ```bash
 npm run dev
-# or
+# oder
 yarn dev
-# or
+# oder
 pnpm dev
-# or
+# oder
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Im Browser öffnen
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Öffne [http://localhost:3000](http://localhost:3000) in deinem Browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Deployment
 
-## Learn More
+### Vercel (Empfohlen)
 
-To learn more about Next.js, take a look at the following resources:
+1. Forke dieses Repository
+2. Verbinde dein GitHub-Konto mit [Vercel](https://vercel.com)
+3. Importiere das Repository
+4. Deploy mit einem Klick!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/njocodes/pomodoro)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Andere Plattformen
 
-## Deploy on Vercel
+Das Projekt kann auch auf anderen Plattformen deployed werden:
+- Netlify
+- Railway
+- Render
+- AWS Amplify
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📖 Verwendung
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Timer starten** - Klicke auf "Start" um eine 25-minütige Arbeitsphase zu beginnen
+2. **Pause machen** - Nach 25 Minuten startet automatisch eine 5-minütige Pause
+3. **Session beenden** - Klicke auf "Stop" um den Timer anzuhalten
+4. **Einstellungen** - Passe die Zeiten in den Einstellungen an
+
+## 🎯 Pomodoro-Technik
+
+Die Pomodoro-Technik ist eine bewährte Zeitmanagement-Methode:
+
+1. **25 Minuten** konzentriert arbeiten
+2. **5 Minuten** kurze Pause
+3. Nach 4 Pomodoros eine **längere Pause** (15-30 Minuten)
+4. Wiederholen
+
+## 🤝 Contributing
+
+Beiträge sind willkommen! Bitte:
+
+1. Forke das Repository
+2. Erstelle einen Feature-Branch (`git checkout -b feature/AmazingFeature`)
+3. Committe deine Änderungen (`git commit -m 'Add some AmazingFeature'`)
+4. Pushe zum Branch (`git push origin feature/AmazingFeature`)
+5. Öffne eine Pull Request
+
+## 📝 License
+
+Dieses Projekt steht unter der MIT License. Siehe [LICENSE](LICENSE) für Details.
+
+## 👨‍💻 Autor
+
+**njocodes**
+- GitHub: [@njocodes](https://github.com/njocodes)
+
+## 🙏 Danksagungen
+
+- [Next.js](https://nextjs.org/) für das großartige Framework
+- [Tailwind CSS](https://tailwindcss.com/) für das Styling
+- [Lucide](https://lucide.dev/) für die Icons
+- [Vercel](https://vercel.com/) für das Hosting
+
+---
+
+⭐ **Gefällt dir das Projekt? Dann gib ihm einen Star!** ⭐
