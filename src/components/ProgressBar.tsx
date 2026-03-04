@@ -13,12 +13,12 @@ export default function ProgressBar({ progress, color, theme }: ProgressBarProps
         theme === 'light' ? 'bg-gray-200' : 'bg-gray-700/50'
       }`}>
         <div 
-          className={`h-2 sm:h-3 rounded-full transition-all duration-1000 ease-out ${color} shadow-lg relative overflow-hidden`}
+          className={`h-2 sm:h-3 rounded-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${color} shadow-lg relative overflow-hidden`}
           style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse ${
+          <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent ${
             theme === 'light' ? 'via-gray-300/30' : 'via-white/20'
-          }`}></div>
+          }`} style={{ animation: 'progressShimmer 2.2s linear infinite' }} />
         </div>
       </div>
       <div className={`text-center mt-1 sm:mt-2 text-xs sm:text-sm font-semibold ${
@@ -26,6 +26,16 @@ export default function ProgressBar({ progress, color, theme }: ProgressBarProps
       }`}>
         {Math.round(progress)}% abgeschlossen
       </div>
+      <style jsx>{`
+        @keyframes progressShimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </div>
   );
 }

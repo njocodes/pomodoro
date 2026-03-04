@@ -35,6 +35,8 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={backgroundColor}
           strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           fill="none"
         />
         
@@ -42,14 +44,16 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
-          strokeWidth={isCompleted ? "5" : "1"}
+          strokeWidth={isCompleted ? "4" : "1"}
           fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           strokeDasharray={halfLength}
           strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
-              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
-              : 'stroke-dashoffset 1s ease-out'
+              ? 'stroke-width 420ms cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
+              : 'stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
           }}
         />
         
@@ -57,14 +61,16 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
         <path
           d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
           stroke={progressColor}
-          strokeWidth={isCompleted ? "5" : "1"}
+          strokeWidth={isCompleted ? "4" : "1"}
           fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           strokeDasharray={halfLength}
           strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
-              ? 'stroke-width 0.5s ease-out, stroke-dashoffset 1s ease-out'
-              : 'stroke-dashoffset 1s ease-out'
+              ? 'stroke-width 420ms cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
+              : 'stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
           }}
         />
       </svg>

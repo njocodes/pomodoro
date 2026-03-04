@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface FlippingClockProps {
   timeLeft: number; // in seconds
@@ -12,6 +12,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   const [displayTime, setDisplayTime] = useState(timeLeft);
   const [flippingDigits, setFlippingDigits] = useState<Set<string>>(new Set());
   const [oldDigits, setOldDigits] = useState<Map<string, string>>(new Map());
+  const flipTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (timeLeft !== displayTime) {
@@ -50,14 +51,26 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
       
       setFlippingDigits(changedDigits);
       setOldDigits(newOldDigits);
-      
-      setTimeout(() => {
+
+      if (flipTimeoutRef.current) {
+        clearTimeout(flipTimeoutRef.current);
+      }
+
+      flipTimeoutRef.current = setTimeout(() => {
         setDisplayTime(timeLeft);
         setFlippingDigits(new Set());
         setOldDigits(new Map());
-      }, 700);
+      }, 560);
     }
   }, [timeLeft, displayTime]);
+
+  useEffect(() => {
+    return () => {
+      if (flipTimeoutRef.current) {
+        clearTimeout(flipTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -132,8 +145,9 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
               style={{
                 transformOrigin: 'bottom',
                 transformStyle: 'preserve-3d',
-                animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
-                borderBottomWidth: '3px',
+                backfaceVisibility: 'hidden',
+                animation: 'flipDownSmooth 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards',
+                borderBottomWidth: '2px',
                 zIndex: 1
               }}
             />
@@ -148,10 +162,11 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
               style={{
                 transformOrigin: 'bottom',
                 transformStyle: 'preserve-3d',
-                animation: 'flipDown 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards',
+                backfaceVisibility: 'hidden',
+                animation: 'flipDownSmooth 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards',
                 boxShadow: theme === 'light' 
-                  ? '0 2px 8px rgba(0, 0, 0, 0.2), 4px 0 12px rgba(0, 0, 0, 0.15), 8px 0 6px rgba(0, 0, 0, 0.08)' 
-                  : '0 2px 8px rgba(255, 255, 255, 0.2), 4px 0 12px rgba(255, 255, 255, 0.15), 8px 0 6px rgba(255, 255, 255, 0.08)',
+                  ? '0 8px 18px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12)' 
+                  : '0 8px 18px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(255, 255, 255, 0.06)',
                 zIndex: 2
               }}
             >
@@ -185,18 +200,29 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   return (
     <>
       <style jsx>{`
-        @keyframes flipDown {
+        @keyframes flipDownSmooth {
           0% {
             transform: rotateX(0deg);
-            width: 100%;
+            opacity: 1;
           }
-          50% {
-            transform: rotateX(-90deg);
-            width: 120%;
+          65% {
+            transform: rotateX(-96deg);
+            opacity: 0.88;
           }
           100% {
             transform: rotateX(-180deg);
-            width: 100%;
+            opacity: 0.68;
+          }
+        }
+
+        @keyframes colonPulse {
+          0%, 100% {
+            opacity: 0.5;
+            transform: translateY(0);
+          }
+          50% {
+            opacity: 0.95;
+            transform: translateY(-1px);
           }
         }
       `}</style>
@@ -214,7 +240,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         {/* Colon */}
         <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mx-3 sm:mx-4 md:mx-5 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
-        }`}>
+        }`} style={{ animation: 'colonPulse 1.5s ease-in-out infinite' }}>
           <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full mb-1 ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
           }`}></div>
