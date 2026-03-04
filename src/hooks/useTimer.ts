@@ -10,6 +10,7 @@ interface TimerState {
   isRunning: boolean;
   mode: TimerMode;
   pomodoroCount: number;
+  completionCount: number;
   workTime: number;
   shortBreak: number;
   longBreak: number;
@@ -22,6 +23,7 @@ export function useTimer() {
     isRunning: false,
     mode: 'work',
     pomodoroCount: 0,
+    completionCount: 0,
     workTime: 25,
     shortBreak: 5,
     longBreak: 15,
@@ -67,6 +69,7 @@ export function useTimer() {
                 ...prev,
                 isRunning: false,
                 pomodoroCount: newPomodoroCount,
+                completionCount: (prev.completionCount ?? 0) + 1,
                 mode: newMode,
                 timeLeft,
                 lastUpdate: Date.now()
@@ -75,6 +78,7 @@ export function useTimer() {
               return {
                 ...prev,
                 isRunning: false,
+                completionCount: (prev.completionCount ?? 0) + 1,
                 mode: 'work',
                 timeLeft: prev.workTime * 60,
                 lastUpdate: Date.now()
@@ -161,6 +165,7 @@ export function useTimer() {
 
   return {
     ...timerState,
+    completionCount: timerState.completionCount ?? 0,
     toggleTimer,
     resetTimer,
     switchMode,

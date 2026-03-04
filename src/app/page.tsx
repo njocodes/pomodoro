@@ -18,12 +18,15 @@ export default function Home() {
   const [isCompleted, setIsCompleted] = useState(false);
   const isMobile = useIsMobile();
   const audioContextRef = useRef<AudioContext | null>(null);
+  const previousCompletionCountRef = useRef<number | null>(null);
+  const completionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const {
     timeLeft,
     isRunning,
     mode,
     pomodoroCount,
+    completionCount,
     workTime,
     shortBreak,
     longBreak,
@@ -64,20 +67,36 @@ export default function Home() {
     }
   };
 
-  // Play sound when timer completes
+  // Play sound and completion animation when a session completes
   useEffect(() => {
-    if (timeLeft === 0 && isRunning) {
-      // Trigger completion effect
+    if (previousCompletionCountRef.current === null) {
+      previousCompletionCountRef.current = completionCount;
+      return;
+    }
+
+    if (completionCount > previousCompletionCountRef.current) {
       setIsCompleted(true);
-      
-      // Reset completion effect after 2 seconds
-      setTimeout(() => {
+
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+      completionTimeoutRef.current = setTimeout(() => {
         setIsCompleted(false);
       }, 2000);
-      
+
       playNotificationSound();
     }
-  }, [timeLeft, isRunning]);
+
+    previousCompletionCountRef.current = completionCount;
+  }, [completionCount]);
+
+  useEffect(() => {
+    return () => {
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle spacebar for fullscreen toggle
   useEffect(() => {
@@ -113,11 +132,11 @@ export default function Home() {
 
   const getProgressColor = () => {
     if (theme === 'light') {
-      return mode === 'work' ? 'bg-gray-900' : 
-             mode === 'shortBreak' ? 'bg-gray-900' : 'bg-gray-900';
+      return mode === 'work' ? 'bg-orange-500' : 
+             mode === 'shortBreak' ? 'bg-emerald-500' : 'bg-sky-500';
     } else {
-      return mode === 'work' ? 'bg-white' : 
-             mode === 'shortBreak' ? 'bg-white' : 'bg-white';
+      return mode === 'work' ? 'bg-orange-400' : 
+             mode === 'shortBreak' ? 'bg-emerald-400' : 'bg-sky-400';
     }
   };
 
@@ -130,8 +149,8 @@ export default function Home() {
   return (
       <div className={`fixed inset-0 flex flex-col items-center justify-center ${
         theme === 'light' 
-          ? 'bg-gray-100 text-gray-900' 
-          : 'bg-black text-white'
+          ? 'bg-gradient-to-br from-stone-100 via-amber-50 to-sky-100 text-gray-900' 
+          : 'bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-900 text-white'
       }`}>
         {/* Edge Progress Bars */}
         <EdgeProgressBar progress={getProgress()} theme={theme} isCompleted={isCompleted} />
@@ -209,18 +228,24 @@ export default function Home() {
   }
 
   return (
-        <div className={`min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
+        <div className={`relative min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 overflow-hidden ${
       theme === 'light' 
-        ? 'bg-gray-100 text-gray-900' 
-        : 'bg-black text-white'
+        ? 'bg-gradient-to-br from-stone-100 via-amber-50 to-sky-100 text-gray-900' 
+        : 'bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-900 text-white'
     }`}>
+      <div className={`absolute -top-24 -left-16 w-72 h-72 rounded-full blur-3xl ${
+        theme === 'light' ? 'bg-orange-300/40' : 'bg-orange-500/20'
+      }`} />
+      <div className={`absolute -bottom-28 -right-12 w-80 h-80 rounded-full blur-3xl ${
+        theme === 'light' ? 'bg-sky-300/40' : 'bg-sky-500/20'
+      }`} />
       <div className={`text-center w-full mx-auto px-2 sm:px-4 ${
         isMobile ? 'max-w-sm' : 'max-w-4xl'
       }`}>
-        <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl md:text-5xl'} font-bold mb-2 sm:mb-3 ${
+        <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl md:text-5xl'} font-extrabold mb-2 sm:mb-3 tracking-tight ${
           theme === 'light'
-            ? 'text-gray-900'
-            : 'text-white'
+            ? 'text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900'
+            : 'text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-sky-200'
         }`}>
           Pomodoro Timer
         </h1>
@@ -281,10 +306,10 @@ export default function Home() {
         {/* Timer display */}
         <div className="mb-6 sm:mb-8 md:mb-10">
           <div 
-            className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 ${
+            className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl ${
               theme === 'light'
-                ? 'bg-white border border-gray-200'
-                : 'bg-gray-900 border border-gray-700'
+                ? 'bg-white/80 border border-white/60 backdrop-blur-md'
+                : 'bg-slate-900/80 border border-slate-700/60 backdrop-blur-md'
             } ${isMobile ? 'cursor-pointer' : ''}`}
             onClick={handleTouchStart}
           >
@@ -312,14 +337,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
             <button
               onClick={toggleTimer}
-              className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-200 ${
+              className={`px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-all duration-200 ${
                 isRunning 
                   ? theme === 'light'
                     ? 'bg-gray-900 hover:bg-gray-800 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-white'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                   : theme === 'light'
-                    ? 'bg-gray-700 hover:bg-gray-800 text-white'
-                    : 'bg-gray-600 hover:bg-gray-500 text-white'
+                    ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                    : 'bg-orange-400 hover:bg-orange-500 text-gray-900'
               }`}
             >
               {isRunning ? 'Pause' : 'Start'}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface SettingsModalProps {
@@ -25,6 +25,13 @@ export default function SettingsModal({
   const [localShortBreak, setLocalShortBreak] = useState(shortBreak);
   const [localLongBreak, setLocalLongBreak] = useState(longBreak);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    setLocalWorkTime(workTime);
+    setLocalShortBreak(shortBreak);
+    setLocalLongBreak(longBreak);
+  }, [isOpen, workTime, shortBreak, longBreak]);
+
   const handleSave = () => {
     // Use default values if fields are empty or 0
     const workTime = localWorkTime === 0 ? 25 : localWorkTime;
@@ -41,8 +48,8 @@ export default function SettingsModal({
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
       <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 shadow-2xl ${
         theme === 'light'
-          ? 'bg-white border border-gray-200'
-          : 'bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50'
+          ? 'bg-white/95 border border-white/70'
+          : 'bg-gradient-to-br from-slate-900/95 to-zinc-900/95 border border-slate-700/70'
       }`}>
         <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
           theme === 'light'
@@ -63,7 +70,7 @@ export default function SettingsModal({
             <button
               onClick={toggleTheme}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                theme === 'dark' ? 'bg-gray-600' : 'bg-gray-300'
+                theme === 'dark' ? 'bg-slate-600' : 'bg-gray-300'
               }`}
             >
               <span
@@ -100,7 +107,7 @@ export default function SettingsModal({
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-gray-700/50 border border-gray-600/50 text-white focus:ring-red-500/50 focus:border-red-500/50 backdrop-blur-sm'
+                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-orange-400/40 focus:border-orange-400/40 backdrop-blur-sm'
               }`}
             />
           </div>
@@ -131,7 +138,7 @@ export default function SettingsModal({
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-gray-700/50 border border-gray-600/50 text-white focus:ring-green-500/50 focus:border-green-500/50 backdrop-blur-sm'
+                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-emerald-400/40 focus:border-emerald-400/40 backdrop-blur-sm'
               }`}
             />
           </div>
@@ -162,7 +169,7 @@ export default function SettingsModal({
               className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 theme === 'light'
                   ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-gray-700/50 border border-gray-600/50 text-white focus:ring-blue-500/50 focus:border-blue-500/50 backdrop-blur-sm'
+                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-sky-400/40 focus:border-sky-400/40 backdrop-blur-sm'
               }`}
             />
           </div>
@@ -181,12 +188,12 @@ export default function SettingsModal({
           </button>
           <button
             onClick={handleSave}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
-              theme === 'light'
-                ? 'bg-gray-900 hover:bg-gray-800 text-white'
-                : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white'
-            }`}
-          >
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
+                theme === 'light'
+                  ? 'bg-gray-900 hover:bg-gray-800 text-white'
+                  : 'bg-gradient-to-r from-orange-400 to-sky-400 hover:from-orange-500 hover:to-sky-500 text-gray-900'
+              }`}
+            >
             Speichern
           </button>
         </div>

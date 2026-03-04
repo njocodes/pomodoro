@@ -16,13 +16,15 @@ export default function CornerDropdown({ onReset, onSettings, theme }: CornerDro
       {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+        aria-label="Schnellaktionen öffnen"
+        aria-expanded={isOpen}
+        className={`w-12 h-12 rounded-full shadow-lg backdrop-blur-md flex items-center justify-center transition-all duration-200 ${
           theme === 'light'
-            ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            ? 'bg-white/85 border border-white/70 text-gray-700 hover:bg-white'
+            : 'bg-slate-900/85 border border-slate-700/70 text-gray-200 hover:bg-slate-800/95'
         }`}
       >
-        <span className={`transform transition-transform duration-200 ${
+        <span className={`text-xl leading-none transform transition-transform duration-200 ${
           isOpen ? 'rotate-45' : ''
         }`}>
           +
@@ -37,28 +39,28 @@ export default function CornerDropdown({ onReset, onSettings, theme }: CornerDro
               onReset();
               setIsOpen(false);
             }}
-            className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+            className={`w-11 h-11 rounded-full shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-200 ${
               theme === 'light'
-                ? 'bg-gray-300 text-gray-900 hover:bg-gray-400'
-                : 'bg-gray-800 text-white hover:bg-gray-700'
+                ? 'bg-orange-100/95 border border-orange-200 text-orange-700 hover:bg-orange-200'
+                : 'bg-orange-500/20 border border-orange-400/30 text-orange-200 hover:bg-orange-500/30'
             }`}
             title="Reset"
           >
-            ↻
+            <span className="text-base">↻</span>
           </button>
           <button
             onClick={() => {
               onSettings();
               setIsOpen(false);
             }}
-            className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+            className={`w-11 h-11 rounded-full shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-200 ${
               theme === 'light'
-                ? 'bg-gray-200 text-gray-900 hover:bg-gray-300'
-                : 'bg-gray-700 text-white hover:bg-gray-600'
+                ? 'bg-sky-100/95 border border-sky-200 text-sky-700 hover:bg-sky-200'
+                : 'bg-sky-500/20 border border-sky-400/30 text-sky-200 hover:bg-sky-500/30'
             }`}
             title="Einstellungen"
           >
-            ⚙
+            <span className="text-base">⚙</span>
           </button>
         </div>
       )}
