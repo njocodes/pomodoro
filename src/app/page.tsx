@@ -156,10 +156,8 @@ export default function Home() {
         <EdgeProgressBar progress={getProgress()} theme={theme} isCompleted={isCompleted} />
         
         {/* Large Clock - 70% of screen */}
-        <div className="w-full h-[70vh] flex flex-col items-center justify-center">
-          <div className="scale-[1.5] sm:scale-[1.8] md:scale-[2]">
-            <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={true} />
-          </div>
+        <div className="w-full h-[70vh] flex flex-col items-center justify-center px-3">
+          <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={true} />
         </div>
         
         {/* Small Control Buttons */}

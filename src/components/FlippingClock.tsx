@@ -87,14 +87,19 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   // Don't pad minutes - show only needed digits
   const minuteDigits = minutes.split('');
   const secondDigits = seconds.padStart(2, '0').split('');
+  const digitSizeStyle = isFullscreen
+    ? { width: 'clamp(3.75rem, 9.5vw, 6.25rem)', height: 'clamp(5rem, 13vw, 8rem)' }
+    : { width: 'clamp(2.85rem, 8vw, 4.5rem)', height: 'clamp(3.8rem, 10.5vw, 5.8rem)' };
+  const digitFontSize = isFullscreen
+    ? 'clamp(2.25rem, 5.2vw, 4rem)'
+    : 'clamp(1.8rem, 4.6vw, 3.2rem)';
+  const colonDotSize = isFullscreen
+    ? 'clamp(0.45rem, 0.9vw, 0.7rem)'
+    : 'clamp(0.35rem, 0.75vw, 0.6rem)';
 
   const FlipDigit = ({ digit, isFlipping, oldDigit }: { digit: string; isFlipping: boolean; oldDigit?: string }) => {
     return (
-      <div className={`relative overflow-hidden ${
-        isFullscreen 
-          ? 'w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36'
-          : 'w-16 h-20 sm:w-18 sm:h-24 md:w-20 md:h-28'
-      }`}>
+      <div className="relative overflow-hidden" style={digitSizeStyle}>
         {/* Static display - shows current digit split in half */}
         <div 
           className={`absolute inset-0 rounded-md shadow-xl ${
@@ -106,22 +111,14 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         >
           {/* Top half of digit */}
           <div className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center overflow-hidden">
-            <div className={`font-bold transform translate-y-1/2 ${
-              isFullscreen 
-                ? 'text-4xl sm:text-5xl md:text-6xl'
-                : 'text-3xl sm:text-4xl md:text-5xl'
-            }`}>
+            <div className="font-bold transform translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
               {digit}
             </div>
           </div>
           
           {/* Bottom half of digit */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-start justify-center overflow-hidden">
-            <div className={`font-bold transform -translate-y-1/2 ${
-              isFullscreen 
-                ? 'text-4xl sm:text-5xl md:text-6xl'
-                : 'text-3xl sm:text-4xl md:text-5xl'
-            }`}>
+            <div className="font-bold transform -translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
               {digit}
             </div>
           </div>
@@ -171,11 +168,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
               }}
             >
               <div className="flex items-end justify-center h-full overflow-hidden">
-                <div className={`font-bold transform translate-y-1/2 ${
-                  isFullscreen 
-                    ? 'text-4xl sm:text-5xl md:text-6xl'
-                    : 'text-3xl sm:text-4xl md:text-5xl'
-                }`}>
+                <div className="font-bold transform translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
                   {oldDigit}
                 </div>
               </div>
@@ -215,7 +208,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
           }
         }
       `}</style>
-      <div className="flex items-center justify-center space-x-2 sm:space-x-3 md:space-x-4" style={{ perspective: '1000px' }}>
+      <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4" style={{ perspective: '1000px' }}>
         {/* Minutes - Dynamic number of digits */}
         {minuteDigits.map((digit, index) => (
           <FlipDigit 
@@ -227,15 +220,15 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         ))}
         
         {/* Colon */}
-        <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mx-3 sm:mx-4 md:mx-5 flex flex-col items-center ${
+        <div className={`font-bold mx-2 sm:mx-3 md:mx-4 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
-          <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full mb-1 ${
+          <div className={`rounded-full mb-1 ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`}></div>
-          <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full ${
+          }`} style={{ width: colonDotSize, height: colonDotSize }}></div>
+          <div className={`rounded-full ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`}></div>
+          }`} style={{ width: colonDotSize, height: colonDotSize }}></div>
         </div>
         
         {/* Seconds - Dynamic number of digits */}
