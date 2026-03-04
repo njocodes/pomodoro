@@ -44,7 +44,7 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
         <path
           d="M 50 0 L 100 0 L 100 100 L 0 100 L 0 0 L 50 0"
           stroke={progressColor}
-          strokeWidth={isCompleted ? "4" : "1"}
+          strokeWidth={isCompleted ? "2" : "1"}
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -52,8 +52,8 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
           strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
-              ? 'stroke-width 420ms cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
-              : 'stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
+              ? 'stroke-width 320ms ease-out, stroke-dashoffset 720ms ease-out'
+              : 'stroke-dashoffset 720ms ease-out'
           }}
         />
         
@@ -61,7 +61,7 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
         <path
           d="M 50 0 L 0 0 L 0 100 L 100 100 L 100 0 L 50 0"
           stroke={progressColor}
-          strokeWidth={isCompleted ? "4" : "1"}
+          strokeWidth={isCompleted ? "2" : "1"}
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -69,8 +69,8 @@ export default function EdgeProgressBar({ progress, theme, isCompleted = false }
           strokeDashoffset={strokeDashoffset}
           style={{
             transition: isCompleted 
-              ? 'stroke-width 420ms cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
-              : 'stroke-dashoffset 820ms cubic-bezier(0.22, 1, 0.36, 1)'
+              ? 'stroke-width 320ms ease-out, stroke-dashoffset 720ms ease-out'
+              : 'stroke-dashoffset 720ms ease-out'
           }}
         />
       </svg>

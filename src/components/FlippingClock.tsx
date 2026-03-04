@@ -60,7 +60,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         setDisplayTime(timeLeft);
         setFlippingDigits(new Set());
         setOldDigits(new Map());
-      }, 560);
+      }, 460);
     }
   }, [timeLeft, displayTime]);
 
@@ -146,7 +146,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
                 transformOrigin: 'bottom',
                 transformStyle: 'preserve-3d',
                 backfaceVisibility: 'hidden',
-                animation: 'flipDownSmooth 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards',
+                animation: 'flipDownSmooth 460ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                 borderBottomWidth: '2px',
                 zIndex: 1
               }}
@@ -163,7 +163,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
                 transformOrigin: 'bottom',
                 transformStyle: 'preserve-3d',
                 backfaceVisibility: 'hidden',
-                animation: 'flipDownSmooth 560ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards',
+                animation: 'flipDownSmooth 460ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                 boxShadow: theme === 'light' 
                   ? '0 8px 18px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12)' 
                   : '0 8px 18px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(255, 255, 255, 0.06)',
@@ -205,24 +205,13 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
             transform: rotateX(0deg);
             opacity: 1;
           }
-          65% {
-            transform: rotateX(-96deg);
-            opacity: 0.88;
+          70% {
+            transform: rotateX(-92deg);
+            opacity: 0.92;
           }
           100% {
             transform: rotateX(-180deg);
-            opacity: 0.68;
-          }
-        }
-
-        @keyframes colonPulse {
-          0%, 100% {
-            opacity: 0.5;
-            transform: translateY(0);
-          }
-          50% {
-            opacity: 0.95;
-            transform: translateY(-1px);
+            opacity: 0.78;
           }
         }
       `}</style>
@@ -240,7 +229,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         {/* Colon */}
         <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mx-3 sm:mx-4 md:mx-5 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
-        }`} style={{ animation: 'colonPulse 1.5s ease-in-out infinite' }}>
+        }`}>
           <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full mb-1 ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
           }`}></div>
