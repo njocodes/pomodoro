@@ -48,8 +48,8 @@ export default function SettingsModal({
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
       <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 shadow-2xl ${
         theme === 'light'
-          ? 'bg-white/95 border border-white/70'
-          : 'bg-gradient-to-br from-slate-900/95 to-zinc-900/95 border border-slate-700/70'
+          ? 'bg-white border border-neutral-200'
+          : 'bg-zinc-900 border border-zinc-800'
       }`}>
         <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
           theme === 'light'
@@ -188,10 +188,10 @@ export default function SettingsModal({
           </button>
           <button
             onClick={handleSave}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg ${
                 theme === 'light'
                   ? 'bg-gray-900 hover:bg-gray-800 text-white'
-                  : 'bg-gradient-to-r from-orange-400 to-sky-400 hover:from-orange-500 hover:to-sky-500 text-gray-900'
+                  : 'bg-white hover:bg-neutral-100 text-zinc-900'
               }`}
             >
             Speichern

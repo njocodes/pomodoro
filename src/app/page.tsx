@@ -148,9 +148,9 @@ export default function Home() {
   if (isFullscreen) {
   return (
       <div className={`fixed inset-0 flex flex-col items-center justify-center ${
-        theme === 'light' 
-          ? 'bg-gradient-to-br from-stone-100 via-amber-50 to-sky-100 text-gray-900' 
-          : 'bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-900 text-white'
+        theme === 'light'
+          ? 'bg-neutral-100 text-gray-900'
+          : 'bg-zinc-950 text-white'
       }`}>
         {/* Edge Progress Bars */}
         <EdgeProgressBar progress={getProgress()} theme={theme} isCompleted={isCompleted} />
@@ -226,26 +226,18 @@ export default function Home() {
   }
 
   return (
-        <div className={`relative min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 overflow-hidden ${
-      theme === 'light' 
-        ? 'bg-gradient-to-br from-stone-100 via-amber-50 to-sky-100 text-gray-900' 
-        : 'bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-900 text-white'
+        <div className={`relative min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
+      theme === 'light'
+        ? 'bg-neutral-100 text-gray-900'
+        : 'bg-zinc-950 text-white'
     }`}>
-      <div className={`absolute -top-24 -left-16 w-72 h-72 rounded-full blur-3xl ${
-        theme === 'light' ? 'bg-orange-300/40' : 'bg-orange-500/20'
-      }`} />
-      <div className={`absolute -bottom-28 -right-12 w-80 h-80 rounded-full blur-3xl ${
-        theme === 'light' ? 'bg-sky-300/40' : 'bg-sky-500/20'
-      }`} />
       <div className={`text-center w-full mx-auto px-2 sm:px-4 ${
         isMobile ? 'max-w-sm' : 'max-w-4xl'
       }`}>
         <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl sm:text-4xl md:text-5xl'} font-extrabold mb-2 sm:mb-3 tracking-tight ${
-          theme === 'light'
-            ? 'text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900'
-            : 'text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-sky-200'
+          theme === 'light' ? 'text-gray-900' : 'text-white'
         }`}>
-          Pomodoro Timer
+          Tempo
         </h1>
         <p className={`${isMobile ? 'text-xs' : 'text-sm sm:text-base md:text-lg'} mb-6 sm:mb-8 md:mb-10 ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
@@ -306,8 +298,8 @@ export default function Home() {
           <div 
             className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl ${
               theme === 'light'
-                ? 'bg-white/80 border border-white/60 backdrop-blur-md'
-                : 'bg-slate-900/80 border border-slate-700/60 backdrop-blur-md'
+                ? 'bg-white border border-neutral-200'
+                : 'bg-zinc-900 border border-zinc-800'
             } ${isMobile ? 'cursor-pointer' : ''}`}
             onClick={handleTouchStart}
           >

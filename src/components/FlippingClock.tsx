@@ -12,6 +12,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   const [displayTime, setDisplayTime] = useState(timeLeft);
   const [flippingDigits, setFlippingDigits] = useState<Set<string>>(new Set());
   const [oldDigits, setOldDigits] = useState<Map<string, string>>(new Map());
+  const [newDigits, setNewDigits] = useState<Map<string, string>>(new Map());
   const flipTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -20,12 +21,11 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
       const newTime = formatTime(timeLeft);
       const [oldMinutes, oldSeconds] = oldTime.split(':');
       const [newMinutes, newSeconds] = newTime.split(':');
-      
-      // Find which digits changed and store old digits
+
       const changedDigits = new Set<string>();
       const newOldDigits = new Map<string, string>();
-      
-      // Check minutes - compare without padding
+      const newNewDigits = new Map<string, string>();
+
       const oldMinDigits = oldMinutes.split('');
       const newMinDigits = newMinutes.split('');
       for (let i = 0; i < Math.max(oldMinDigits.length, newMinDigits.length); i++) {
@@ -34,10 +34,10 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         if (oldDigit !== newDigit) {
           changedDigits.add(`min-${i}`);
           newOldDigits.set(`min-${i}`, oldDigit);
+          newNewDigits.set(`min-${i}`, newDigit);
         }
       }
-      
-      // Check seconds - always 2 digits
+
       const oldSecDigits = oldSeconds.padStart(2, '0').split('');
       const newSecDigits = newSeconds.padStart(2, '0').split('');
       for (let i = 0; i < 2; i++) {
@@ -46,11 +46,13 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         if (oldDigit !== newDigit) {
           changedDigits.add(`sec-${i}`);
           newOldDigits.set(`sec-${i}`, oldDigit);
+          newNewDigits.set(`sec-${i}`, newDigit);
         }
       }
-      
+
       setFlippingDigits(changedDigits);
       setOldDigits(newOldDigits);
+      setNewDigits(newNewDigits);
 
       if (flipTimeoutRef.current) {
         clearTimeout(flipTimeoutRef.current);
@@ -60,7 +62,8 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         setDisplayTime(timeLeft);
         setFlippingDigits(new Set());
         setOldDigits(new Map());
-      }, 460);
+        setNewDigits(new Map());
+      }, 385);
     }
   }, [timeLeft, displayTime]);
 
@@ -75,18 +78,14 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    // Show minutes as natural number (no padding)
-    const minsStr = mins.toString();
-    return `${minsStr}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString()}:${secs.toString().padStart(2, '0')}`;
   };
 
   const timeString = formatTime(displayTime);
   const [minutes, seconds] = timeString.split(':');
-  
-  // Split minutes and seconds into individual digits
-  // Don't pad minutes - show only needed digits
   const minuteDigits = minutes.split('');
   const secondDigits = seconds.padStart(2, '0').split('');
+
   const digitSizeStyle = isFullscreen
     ? { width: 'clamp(3.75rem, 9.5vw, 6.25rem)', height: 'clamp(5rem, 13vw, 8rem)' }
     : { width: 'clamp(2.85rem, 8vw, 4.5rem)', height: 'clamp(3.8rem, 10.5vw, 5.8rem)' };
@@ -97,95 +96,118 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
     ? 'clamp(0.45rem, 0.9vw, 0.7rem)'
     : 'clamp(0.35rem, 0.75vw, 0.6rem)';
 
-  const FlipDigit = ({ digit, isFlipping, oldDigit }: { digit: string; isFlipping: boolean; oldDigit?: string }) => {
+  const cardBg = theme === 'light' ? '#ffffff' : '#1f2937';
+  const textColor = theme === 'light' ? '#111827' : '#f3f4f6';
+  const borderColor = theme === 'light' ? '#d1d5db' : '#374151';
+  const centerLineColor = theme === 'light' ? '#d1d5db' : '#4b5563';
+
+  const TopContent = ({ d }: { d: string }) => (
+    <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+      <div className="font-bold" style={{ fontSize: digitFontSize, lineHeight: 1, color: textColor, transform: 'translateY(50%)' }}>
+        {d}
+      </div>
+    </div>
+  );
+
+  const BottomContent = ({ d }: { d: string }) => (
+    <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
+      <div className="font-bold" style={{ fontSize: digitFontSize, lineHeight: 1, color: textColor, transform: 'translateY(-50%)' }}>
+        {d}
+      </div>
+    </div>
+  );
+
+  const FlipDigit = ({ digit, isFlipping, oldDigit, newDigit }: {
+    digit: string;
+    isFlipping: boolean;
+    oldDigit?: string;
+    newDigit?: string;
+  }) => {
+    const showFlip = isFlipping && oldDigit !== undefined && newDigit !== undefined;
+
     return (
-      <div className="relative overflow-hidden" style={digitSizeStyle}>
-        {/* Static display - shows current digit split in half */}
-        <div 
-          className={`absolute inset-0 rounded-md shadow-xl ${
-            theme === 'light'
-              ? 'bg-white text-gray-900 border border-gray-300'
-              : 'bg-gray-800 text-gray-100 border border-gray-700'
-          }`}
-          style={{ transformStyle: 'preserve-3d' }}
-        >
-          {/* Top half of digit */}
-          <div className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center overflow-hidden">
-            <div className="font-bold transform translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
-              {digit}
-            </div>
-          </div>
-          
-          {/* Bottom half of digit */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-start justify-center overflow-hidden">
-            <div className="font-bold transform -translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
-              {digit}
-            </div>
-          </div>
-          
-          {/* Center line */}
-          <div className={`absolute top-1/2 left-0 right-0 h-px ${
-            theme === 'light' ? 'bg-gray-300' : 'bg-gray-600'
-          }`}></div>
-        </div>
-        
-        {/* Flipping animation layer */}
-        {isFlipping && oldDigit && (
+      <div className="relative" style={{
+        ...digitSizeStyle,
+        perspective: '600px',
+        borderRadius: '0.375rem',
+        boxShadow: theme === 'light'
+          ? '0 10px 25px -5px rgba(0,0,0,0.12), 0 4px 8px -4px rgba(0,0,0,0.08)'
+          : '0 10px 25px -5px rgba(0,0,0,0.5), 0 4px 8px -4px rgba(0,0,0,0.3)',
+      }}>
+        {showFlip ? (
           <>
-            {/* Extended border for the expanding card */}
-            <div 
-              className={`absolute top-0 left-0 h-1/2 rounded-t-md ${
-                theme === 'light'
-                  ? 'border-2 border-gray-300'
-                  : 'border-2 border-gray-700'
-              }`}
-              style={{
-                transformOrigin: 'bottom',
-                transformStyle: 'preserve-3d',
-                backfaceVisibility: 'hidden',
-                animation: 'flipDownSmooth 460ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-                borderBottomWidth: '2px',
-                zIndex: 1
-              }}
-            />
-            
-            {/* Main flipping card */}
-            <div 
-              className={`absolute top-0 left-0 h-1/2 rounded-t-md ${
-                theme === 'light'
-                  ? 'bg-white text-gray-900'
-                  : 'bg-gray-800 text-gray-100'
-              }`}
-              style={{
-                transformOrigin: 'bottom',
-                transformStyle: 'preserve-3d',
-                backfaceVisibility: 'hidden',
-                animation: 'flipDownSmooth 460ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-                boxShadow: theme === 'light' 
-                  ? '0 8px 18px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12)' 
-                  : '0 8px 18px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(255, 255, 255, 0.06)',
-                zIndex: 2
-              }}
-            >
-              <div className="flex items-end justify-center h-full overflow-hidden">
-                <div className="font-bold transform translate-y-1/2" style={{ fontSize: digitFontSize, lineHeight: 1 }}>
-                  {oldDigit}
-                </div>
+            {/* Layer 1: full static old card (background) */}
+            <div className="absolute inset-0 rounded-md" style={{ background: cardBg, zIndex: 0 }}>
+              <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
+                <TopContent d={oldDigit} />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
+                <BottomContent d={oldDigit} />
               </div>
             </div>
+
+            {/* Layer 2: static new top half (revealed as flip-top rotates away) */}
+            <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden" style={{ background: cardBg, zIndex: 1 }}>
+              <TopContent d={newDigit} />
+            </div>
+
+            {/* Layer 3: flip-top — old top half rotates 0° → -90° (ease-in, falls forward) */}
+            <div
+              className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden"
+              style={{
+                background: cardBg,
+                zIndex: 2,
+                transformOrigin: 'center bottom',
+                animation: 'flipTopDown 185ms cubic-bezier(0.55, 0, 1, 0.45) forwards',
+              }}
+            >
+              <TopContent d={oldDigit} />
+              <div
+                className="absolute inset-0 bg-black"
+                style={{ animation: 'foldShadowIn 185ms ease-in forwards', opacity: 0 }}
+              />
+            </div>
+
+            {/* Layer 4: flip-bottom — new bottom half rotates 90° → 0° with delay (ease-out, falls into place) */}
+            <div
+              className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden"
+              style={{
+                background: cardBg,
+                zIndex: 2,
+                transformOrigin: 'center top',
+                animation: 'flipBottomUp 185ms cubic-bezier(0, 0.55, 0.45, 1) 185ms both',
+              }}
+            >
+              <BottomContent d={newDigit} />
+              <div
+                className="absolute inset-0 bg-black"
+                style={{ animation: 'foldShadowOut 185ms ease-out 185ms both', opacity: 0.25 }}
+              />
+            </div>
           </>
+        ) : (
+          /* Static card */
+          <div className="absolute inset-0 rounded-md" style={{ background: cardBg, zIndex: 0 }}>
+            <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
+              <TopContent d={digit} />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
+              <BottomContent d={digit} />
+            </div>
+          </div>
         )}
-        
-        {/* Base shadow */}
-        <div className={`absolute -bottom-2 left-0 right-0 h-2 rounded-full ${
-          theme === 'light' 
-            ? 'bg-gray-300 shadow-lg' 
-            : 'bg-gray-900 shadow-lg'
-        }`} style={{
-          boxShadow: theme === 'light'
-            ? '0 6px 16px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15)'
-            : '0 6px 16px rgba(255, 255, 255, 0.25), 0 2px 8px rgba(255, 255, 255, 0.15)'
-        }}></div>
+
+        {/* Border frame — always on top */}
+        <div
+          className="absolute inset-0 rounded-md pointer-events-none"
+          style={{ border: `1px solid ${borderColor}`, zIndex: 5 }}
+        />
+
+        {/* Center divider line — always on top */}
+        <div
+          className="absolute left-0 right-0 pointer-events-none"
+          style={{ top: '50%', height: '1px', background: centerLineColor, zIndex: 5 }}
+        />
       </div>
     );
   };
@@ -193,51 +215,53 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   return (
     <>
       <style jsx>{`
-        @keyframes flipDownSmooth {
-          0% {
-            transform: rotateX(0deg);
-            opacity: 1;
-          }
-          70% {
-            transform: rotateX(-92deg);
-            opacity: 0.92;
-          }
-          100% {
-            transform: rotateX(-180deg);
-            opacity: 0.78;
-          }
+        @keyframes flipTopDown {
+          from { transform: rotateX(0deg); }
+          to   { transform: rotateX(-90deg); }
+        }
+        @keyframes flipBottomUp {
+          from { transform: rotateX(90deg); }
+          to   { transform: rotateX(0deg); }
+        }
+        @keyframes foldShadowIn {
+          from { opacity: 0; }
+          to   { opacity: 0.25; }
+        }
+        @keyframes foldShadowOut {
+          from { opacity: 0.25; }
+          to   { opacity: 0; }
         }
       `}</style>
-      <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4" style={{ perspective: '1000px' }}>
-        {/* Minutes - Dynamic number of digits */}
+      <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
         {minuteDigits.map((digit, index) => (
-          <FlipDigit 
+          <FlipDigit
             key={`min-${index}`}
-            digit={digit} 
+            digit={digit}
             isFlipping={flippingDigits.has(`min-${index}`)}
             oldDigit={oldDigits.get(`min-${index}`)}
+            newDigit={newDigits.get(`min-${index}`)}
           />
         ))}
-        
+
         {/* Colon */}
         <div className={`font-bold mx-2 sm:mx-3 md:mx-4 flex flex-col items-center ${
           theme === 'light' ? 'text-gray-600' : 'text-gray-400'
         }`}>
           <div className={`rounded-full mb-1 ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`} style={{ width: colonDotSize, height: colonDotSize }}></div>
+          }`} style={{ width: colonDotSize, height: colonDotSize }} />
           <div className={`rounded-full ${
             theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`} style={{ width: colonDotSize, height: colonDotSize }}></div>
+          }`} style={{ width: colonDotSize, height: colonDotSize }} />
         </div>
-        
-        {/* Seconds - Dynamic number of digits */}
+
         {secondDigits.map((digit, index) => (
-          <FlipDigit 
+          <FlipDigit
             key={`sec-${index}`}
-            digit={digit} 
+            digit={digit}
             isFlipping={flippingDigits.has(`sec-${index}`)}
             oldDigit={oldDigits.get(`sec-${index}`)}
+            newDigit={newDigits.get(`sec-${index}`)}
           />
         ))}
       </div>
