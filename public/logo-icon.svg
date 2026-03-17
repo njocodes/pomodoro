@@ -1,0 +1,16 @@
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stem knob (tomato/timer top) -->
+  <rect x="92" y="22" width="16" height="18" rx="8" fill="#1E1E1E"/>
+  <!-- Timer body -->
+  <circle cx="100" cy="112" r="76" fill="#1E1E1E"/>
+  <!-- Ring background track -->
+  <circle cx="100" cy="112" r="54" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="7"/>
+  <!-- Progress arc: 270° (3/4 of circumference) -->
+  <!-- C = 2π×54 ≈ 339.29 | 3/4C ≈ 254.47 | gap ≈ 84.82 -->
+  <circle cx="100" cy="112" r="54" fill="none" stroke="white" stroke-width="7"
+          stroke-dasharray="254.47 84.82"
+          stroke-linecap="round"
+          transform="rotate(-90 100 112)"/>
+  <!-- Center pivot dot -->
+  <circle cx="100" cy="112" r="5" fill="white"/>
+</svg>
