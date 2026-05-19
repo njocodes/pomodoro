@@ -4,11 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 
 interface FlippingClockProps {
   timeLeft: number; // in seconds
-  theme: 'light' | 'dark';
   isFullscreen?: boolean;
 }
 
-export default function FlippingClock({ timeLeft, theme, isFullscreen = false }: FlippingClockProps) {
+export default function FlippingClock({ timeLeft, isFullscreen = false }: FlippingClockProps) {
   const [displayTime, setDisplayTime] = useState(timeLeft);
   const [flippingDigits, setFlippingDigits] = useState<Set<string>>(new Set());
   const [oldDigits, setOldDigits] = useState<Map<string, string>>(new Map());
@@ -96,14 +95,22 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
     ? 'clamp(0.6rem, 1.2vw, 1rem)'
     : 'clamp(0.5rem, 1vw, 0.8rem)';
 
-  const cardBg = '#1c1c1e';
+  const cardBg = '#1c1b19';
   const textColor = '#f5f0e8';
-  const borderColor = '#2c2c2e';
-  const centerLineColor = '#222224';
+  const borderColor = '#2a2825';
+  const centerLineColor = '#211f1d';
+
+  const digitStyle: React.CSSProperties = {
+    fontSize: digitFontSize,
+    lineHeight: 1,
+    color: textColor,
+    fontFamily: 'var(--font-geist-mono)',
+    fontVariantNumeric: 'tabular-nums',
+  };
 
   const TopContent = ({ d }: { d: string }) => (
     <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
-      <div className="font-bold" style={{ fontSize: digitFontSize, lineHeight: 1, color: textColor, transform: 'translateY(50%)' }}>
+      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(50%)' }}>
         {d}
       </div>
     </div>
@@ -111,7 +118,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
 
   const BottomContent = ({ d }: { d: string }) => (
     <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
-      <div className="font-bold" style={{ fontSize: digitFontSize, lineHeight: 1, color: textColor, transform: 'translateY(-50%)' }}>
+      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(-50%)' }}>
         {d}
       </div>
     </div>
@@ -130,9 +137,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         ...digitSizeStyle,
         perspective: '600px',
         borderRadius: '0.375rem',
-        boxShadow: theme === 'light'
-          ? '0 18px 40px -6px rgba(0,0,0,0.5), 0 6px 14px -4px rgba(0,0,0,0.3)'
-          : '0 18px 40px -6px rgba(0,0,0,0.7), 0 6px 14px -4px rgba(0,0,0,0.5)',
+        boxShadow: '0 18px 40px -6px rgba(0,0,0,0.65), 0 6px 14px -4px rgba(0,0,0,0.45)',
       }}>
         {showFlip ? (
           <>

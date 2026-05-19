@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -12,15 +11,14 @@ interface SettingsModalProps {
   onSave: (workTime: number, shortBreak: number, longBreak: number) => void;
 }
 
-export default function SettingsModal({ 
-  isOpen, 
-  onClose, 
-  workTime, 
-  shortBreak, 
-  longBreak, 
-  onSave 
+export default function SettingsModal({
+  isOpen,
+  onClose,
+  workTime,
+  shortBreak,
+  longBreak,
+  onSave,
 }: SettingsModalProps) {
-  const { theme, toggleTheme } = useTheme();
   const [localWorkTime, setLocalWorkTime] = useState(workTime);
   const [localShortBreak, setLocalShortBreak] = useState(shortBreak);
   const [localLongBreak, setLocalLongBreak] = useState(longBreak);
@@ -33,167 +31,84 @@ export default function SettingsModal({
   }, [isOpen, workTime, shortBreak, longBreak]);
 
   const handleSave = () => {
-    // Use default values if fields are empty or 0
-    const workTime = localWorkTime === 0 ? 25 : localWorkTime;
-    const shortBreak = localShortBreak === 0 ? 5 : localShortBreak;
-    const longBreak = localLongBreak === 0 ? 15 : localLongBreak;
-    
-    onSave(workTime, shortBreak, longBreak);
+    onSave(
+      localWorkTime === 0 ? 25 : localWorkTime,
+      localShortBreak === 0 ? 5 : localShortBreak,
+      localLongBreak === 0 ? 15 : localLongBreak,
+    );
     onClose();
   };
 
   if (!isOpen) return null;
 
+  const inputClass = `
+    w-full px-4 py-3 rounded-xl text-sm font-medium outline-none transition-all
+    bg-[#1c1b19] border border-[#2a2825] text-[#f5f0e8]
+    focus:border-[#d97757] focus:ring-2 focus:ring-[#d97757]/20
+  `;
+
+  const fields: { label: string; value: number; setter: (v: number) => void; min: number; max: number }[] = [
+    { label: 'Arbeitszeit (Minuten)', value: localWorkTime, setter: setLocalWorkTime, min: 1, max: 60 },
+    { label: 'Kurze Pause (Minuten)', value: localShortBreak, setter: setLocalShortBreak, min: 1, max: 30 },
+    { label: 'Lange Pause (Minuten)', value: localLongBreak, setter: setLocalLongBreak, min: 1, max: 60 },
+  ];
+
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 shadow-2xl ${
-        theme === 'light'
-          ? 'bg-white border border-neutral-200'
-          : 'bg-zinc-900 border border-zinc-800'
-      }`}>
-        <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
-          theme === 'light'
-            ? 'text-gray-900'
-            : 'text-white'
-        }`}>
-          Timer Einstellungen
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div
+        className="rounded-2xl p-6 sm:p-8 w-full max-w-sm shadow-2xl"
+        style={{ background: '#161513', border: '1px solid #26241f' }}
+      >
+        <h2 className="text-lg font-semibold tracking-tight text-[#f5f0e8] mb-6 text-center">
+          Einstellungen
         </h2>
-        
-        <div className="space-y-6">
-          {/* Theme Switch */}
-          <div className="flex items-center justify-between p-4 rounded-xl border">
-            <span className={`font-semibold ${
-              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
-            }`}>
-              Theme
-            </span>
-            <button
-              onClick={toggleTheme}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                theme === 'dark' ? 'bg-slate-600' : 'bg-gray-300'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
-                }`}
+
+        <div className="space-y-5">
+          {fields.map(({ label, value, setter, min, max }) => (
+            <div key={label}>
+              <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#6b6862' }}>
+                {label}
+              </label>
+              <input
+                type="number"
+                min={min}
+                max={max}
+                value={value === 0 ? '' : value}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === '') { setter(0); return; }
+                  const n = parseInt(v);
+                  if (!isNaN(n) && n >= min && n <= max) setter(n);
+                }}
+                className={inputClass}
               />
-            </button>
-          </div>
-
-          {/* Work Time */}
-          <div>
-            <label className={`block text-sm font-semibold mb-3 ${
-              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
-            }`}>
-              Arbeitszeit (Minuten)
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="60"
-              value={localWorkTime === 0 ? '' : localWorkTime}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === '') {
-                  setLocalWorkTime(0);
-                } else {
-                  const numValue = parseInt(value);
-                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 60) {
-                    setLocalWorkTime(numValue);
-                  }
-                }
-              }}
-              className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                theme === 'light'
-                  ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-orange-400/40 focus:border-orange-400/40 backdrop-blur-sm'
-              }`}
-            />
-          </div>
-
-          {/* Short Break */}
-          <div>
-            <label className={`block text-sm font-semibold mb-3 ${
-              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
-            }`}>
-              Kurze Pause (Minuten)
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="30"
-              value={localShortBreak === 0 ? '' : localShortBreak}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === '') {
-                  setLocalShortBreak(0);
-                } else {
-                  const numValue = parseInt(value);
-                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 30) {
-                    setLocalShortBreak(numValue);
-                  }
-                }
-              }}
-              className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                theme === 'light'
-                  ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-emerald-400/40 focus:border-emerald-400/40 backdrop-blur-sm'
-              }`}
-            />
-          </div>
-
-          {/* Long Break */}
-          <div>
-            <label className={`block text-sm font-semibold mb-3 ${
-              theme === 'light' ? 'text-gray-700' : 'text-gray-300'
-            }`}>
-              Lange Pause (Minuten)
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="60"
-              value={localLongBreak === 0 ? '' : localLongBreak}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === '') {
-                  setLocalLongBreak(0);
-                } else {
-                  const numValue = parseInt(value);
-                  if (!isNaN(numValue) && numValue >= 1 && numValue <= 60) {
-                    setLocalLongBreak(numValue);
-                  }
-                }
-              }}
-              className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                theme === 'light'
-                  ? 'bg-gray-100 border border-gray-300 text-gray-900 focus:ring-gray-500/50 focus:border-gray-500/50'
-                  : 'bg-slate-700/40 border border-slate-500/50 text-white focus:ring-sky-400/40 focus:border-sky-400/40 backdrop-blur-sm'
-              }`}
-            />
-          </div>
+            </div>
+          ))}
         </div>
 
-        <div className="flex justify-end space-x-4 mt-8">
+        <div className="flex justify-end gap-3 mt-8">
           <button
             onClick={onClose}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-              theme === 'light'
-                ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-            }`}
+            className="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
+            style={{ color: '#a8a29a', border: '1px solid #2a2825', background: 'transparent' }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = '#f5f0e8';
+              e.currentTarget.style.background = '#1c1b19';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = '#a8a29a';
+              e.currentTarget.style.background = 'transparent';
+            }}
           >
             Abbrechen
           </button>
           <button
             onClick={handleSave}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg ${
-                theme === 'light'
-                  ? 'bg-gray-900 hover:bg-gray-800 text-white'
-                  : 'bg-white hover:bg-neutral-100 text-zinc-900'
-              }`}
-            >
+            className="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
+            style={{ background: '#d97757', color: '#1a1512' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#c96a4a')}
+            onMouseLeave={e => (e.currentTarget.style.background = '#d97757')}
+          >
             Speichern
           </button>
         </div>
