@@ -181,7 +181,7 @@ export default function Home() {
       className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6"
       style={{ background: '#0d0c0b' }}
     >
-      <div className={`text-center w-full mx-auto ${isMobile ? 'max-w-sm' : 'max-w-2xl'}`}>
+      <div className={`text-center w-full mx-auto ${isMobile ? 'max-w-sm' : 'max-w-4xl'}`}>
 
         {/* Title */}
         <h1 className={`font-semibold tracking-tight mb-1 ${isMobile ? 'text-2xl' : 'text-3xl'}`}
@@ -229,7 +229,7 @@ export default function Home() {
             }}
             onClick={isMobile ? toggleTimer : undefined}
           >
-            <div className="px-6 py-7 sm:px-10 sm:py-9 flex flex-col items-center">
+            <div className="px-6 py-7 sm:px-12 sm:py-10 flex flex-col items-center">
               <div
                 className="text-[0.6rem] sm:text-[0.65rem] font-medium mb-5 sm:mb-7 select-none"
                 style={{ color: '#6b6862', letterSpacing: '0.35em', textTransform: 'uppercase' }}

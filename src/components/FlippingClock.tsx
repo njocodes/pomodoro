@@ -86,11 +86,11 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
   const secondDigits = seconds.padStart(2, '0').split('');
 
   const digitSizeStyle = isFullscreen
-    ? { width: 'clamp(5rem, 13vw, 8.5rem)', height: 'clamp(6.8rem, 17vw, 11.5rem)' }
-    : { width: 'clamp(4rem, 11vw, 7rem)', height: 'clamp(5.4rem, 14.5vw, 9.5rem)' };
+    ? { width: 'clamp(6rem, 15vw, 10rem)', height: 'clamp(8rem, 20vw, 13.5rem)' }
+    : { width: 'clamp(5.5rem, 14vw, 9rem)', height: 'clamp(7.5rem, 18vw, 12rem)' };
   const digitFontSize = isFullscreen
-    ? 'clamp(3.2rem, 8vw, 6.5rem)'
-    : 'clamp(2.5rem, 6.5vw, 5rem)';
+    ? 'clamp(4rem, 10vw, 8rem)'
+    : 'clamp(3.5rem, 8.5vw, 7rem)';
   const colonDotSize = isFullscreen
     ? 'clamp(0.6rem, 1.2vw, 1rem)'
     : 'clamp(0.5rem, 1vw, 0.8rem)';
