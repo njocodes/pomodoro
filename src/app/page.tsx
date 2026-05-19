@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import FlippingClock from '@/components/FlippingClock';
-import ProgressBar from '@/components/ProgressBar';
 import EdgeProgressBar from '@/components/EdgeProgressBar';
 import LeftModeDropdown from '@/components/LeftModeDropdown';
 import CornerDropdown from '@/components/CornerDropdown';
@@ -149,8 +148,8 @@ export default function Home() {
   return (
       <div className={`fixed inset-0 flex flex-col items-center justify-center ${
         theme === 'light'
-          ? 'bg-neutral-100 text-gray-900'
-          : 'bg-zinc-950 text-white'
+          ? 'bg-neutral-200 text-gray-900'
+          : 'bg-zinc-900 text-white'
       }`}>
         {/* Edge Progress Bars */}
         <EdgeProgressBar progress={getProgress()} theme={theme} isCompleted={isCompleted} />
@@ -228,8 +227,8 @@ export default function Home() {
   return (
         <div className={`relative min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 ${
       theme === 'light'
-        ? 'bg-neutral-100 text-gray-900'
-        : 'bg-zinc-950 text-white'
+        ? 'bg-neutral-200 text-gray-900'
+        : 'bg-zinc-900 text-white'
     }`}>
       <div className={`text-center w-full mx-auto px-2 sm:px-4 ${
         isMobile ? 'max-w-sm' : 'max-w-4xl'
@@ -293,32 +292,35 @@ export default function Home() {
           </div>
         )}
 
-        {/* Timer display */}
+        {/* Timer display — clock housing */}
         <div className="mb-6 sm:mb-8 md:mb-10">
-          <div 
-            className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl ${
+          <div
+            className={`rounded-2xl sm:rounded-3xl overflow-hidden ${isMobile ? 'cursor-pointer' : ''} ${
               theme === 'light'
-                ? 'bg-white border border-neutral-200'
-                : 'bg-zinc-900 border border-zinc-800'
-            } ${isMobile ? 'cursor-pointer' : ''}`}
+                ? 'shadow-[0_20px_60px_rgba(0,0,0,0.35),0_8px_22px_rgba(0,0,0,0.18)]'
+                : 'shadow-[0_20px_60px_rgba(0,0,0,0.6),0_8px_22px_rgba(0,0,0,0.4)]'
+            }`}
+            style={{ background: '#111113' }}
             onClick={handleTouchStart}
           >
-            <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center ${
-              theme === 'light'
-                ? 'text-gray-900'
-                : 'text-white'
-            }`}>
-              {getModeText()}
-            </h2>
-            <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={false} />
-            <ProgressBar progress={getProgress()} color={getProgressColor()} theme={theme} />
-            {isMobile && (
-              <div className={`text-xs text-center mt-2 ${
-                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
-              }`}>
-                {isRunning ? 'Tippen zum Pausieren' : 'Tippen zum Starten'}
+            <div className="px-6 py-6 sm:px-10 sm:py-8 flex flex-col items-center">
+              <div className="text-zinc-500 text-[0.6rem] sm:text-xs tracking-[0.3em] uppercase mb-4 sm:mb-6 font-medium select-none">
+                {getModeText()}
               </div>
-            )}
+              <FlippingClock timeLeft={timeLeft} theme={theme} isFullscreen={false} />
+              {isMobile && (
+                <div className="text-zinc-600 text-xs mt-3 select-none">
+                  {isRunning ? 'Tippen zum Pausieren' : 'Tippen zum Starten'}
+                </div>
+              )}
+            </div>
+            {/* Progress strip at bottom of housing */}
+            <div className="h-0.5 bg-zinc-800">
+              <div
+                className={`h-full transition-all duration-500 ease-out ${getProgressColor()}`}
+                style={{ width: `${getProgress()}%` }}
+              />
+            </div>
           </div>
         </div>
 

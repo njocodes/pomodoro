@@ -87,19 +87,19 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
   const secondDigits = seconds.padStart(2, '0').split('');
 
   const digitSizeStyle = isFullscreen
-    ? { width: 'clamp(3.75rem, 9.5vw, 6.25rem)', height: 'clamp(5rem, 13vw, 8rem)' }
-    : { width: 'clamp(2.85rem, 8vw, 4.5rem)', height: 'clamp(3.8rem, 10.5vw, 5.8rem)' };
+    ? { width: 'clamp(5rem, 13vw, 8.5rem)', height: 'clamp(6.8rem, 17vw, 11.5rem)' }
+    : { width: 'clamp(4rem, 11vw, 7rem)', height: 'clamp(5.4rem, 14.5vw, 9.5rem)' };
   const digitFontSize = isFullscreen
-    ? 'clamp(2.25rem, 5.2vw, 4rem)'
-    : 'clamp(1.8rem, 4.6vw, 3.2rem)';
+    ? 'clamp(3.2rem, 8vw, 6.5rem)'
+    : 'clamp(2.5rem, 6.5vw, 5rem)';
   const colonDotSize = isFullscreen
-    ? 'clamp(0.45rem, 0.9vw, 0.7rem)'
-    : 'clamp(0.35rem, 0.75vw, 0.6rem)';
+    ? 'clamp(0.6rem, 1.2vw, 1rem)'
+    : 'clamp(0.5rem, 1vw, 0.8rem)';
 
-  const cardBg = theme === 'light' ? '#ffffff' : '#1f2937';
-  const textColor = theme === 'light' ? '#111827' : '#f3f4f6';
-  const borderColor = theme === 'light' ? '#d1d5db' : '#374151';
-  const centerLineColor = theme === 'light' ? '#d1d5db' : '#4b5563';
+  const cardBg = '#1c1c1e';
+  const textColor = '#f5f0e8';
+  const borderColor = '#2c2c2e';
+  const centerLineColor = '#222224';
 
   const TopContent = ({ d }: { d: string }) => (
     <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
@@ -131,8 +131,8 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         perspective: '600px',
         borderRadius: '0.375rem',
         boxShadow: theme === 'light'
-          ? '0 10px 25px -5px rgba(0,0,0,0.12), 0 4px 8px -4px rgba(0,0,0,0.08)'
-          : '0 10px 25px -5px rgba(0,0,0,0.5), 0 4px 8px -4px rgba(0,0,0,0.3)',
+          ? '0 18px 40px -6px rgba(0,0,0,0.5), 0 6px 14px -4px rgba(0,0,0,0.3)'
+          : '0 18px 40px -6px rgba(0,0,0,0.7), 0 6px 14px -4px rgba(0,0,0,0.5)',
       }}>
         {showFlip ? (
           <>
@@ -232,7 +232,7 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
           to   { opacity: 0; }
         }
       `}</style>
-      <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
+      <div className="flex items-center justify-center gap-3 sm:gap-5 md:gap-6">
         {minuteDigits.map((digit, index) => (
           <FlipDigit
             key={`min-${index}`}
@@ -244,15 +244,9 @@ export default function FlippingClock({ timeLeft, theme, isFullscreen = false }:
         ))}
 
         {/* Colon */}
-        <div className={`font-bold mx-2 sm:mx-3 md:mx-4 flex flex-col items-center ${
-          theme === 'light' ? 'text-gray-600' : 'text-gray-400'
-        }`}>
-          <div className={`rounded-full mb-1 ${
-            theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`} style={{ width: colonDotSize, height: colonDotSize }} />
-          <div className={`rounded-full ${
-            theme === 'light' ? 'bg-gray-600' : 'bg-gray-400'
-          }`} style={{ width: colonDotSize, height: colonDotSize }} />
+        <div className="flex flex-col items-center gap-2 mx-3 sm:mx-4 md:mx-5">
+          <div className="rounded-full" style={{ width: colonDotSize, height: colonDotSize, background: '#f5f0e8' }} />
+          <div className="rounded-full" style={{ width: colonDotSize, height: colonDotSize, background: '#f5f0e8' }} />
         </div>
 
         {secondDigits.map((digit, index) => (
