@@ -53,10 +53,7 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
       setOldDigits(newOldDigits);
       setNewDigits(newNewDigits);
 
-      if (flipTimeoutRef.current) {
-        clearTimeout(flipTimeoutRef.current);
-      }
-
+      if (flipTimeoutRef.current) clearTimeout(flipTimeoutRef.current);
       flipTimeoutRef.current = setTimeout(() => {
         setDisplayTime(timeLeft);
         setFlippingDigits(new Set());
@@ -67,11 +64,7 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
   }, [timeLeft, displayTime]);
 
   useEffect(() => {
-    return () => {
-      if (flipTimeoutRef.current) {
-        clearTimeout(flipTimeoutRef.current);
-      }
-    };
+    return () => { if (flipTimeoutRef.current) clearTimeout(flipTimeoutRef.current); };
   }, []);
 
   const formatTime = (seconds: number) => {
@@ -85,15 +78,22 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
   const minuteDigits = minutes.split('');
   const secondDigits = seconds.padStart(2, '0').split('');
 
-  const digitSizeStyle = isFullscreen
-    ? { width: 'clamp(6rem, 15vw, 10rem)', height: 'clamp(8rem, 20vw, 13.5rem)' }
-    : { width: 'clamp(5.5rem, 14vw, 9rem)', height: 'clamp(7.5rem, 18vw, 12rem)' };
+  // Viewport-relative sizing: scales with screen, with a rem floor for mobile
+  const cardHeight = isFullscreen
+    ? 'max(8rem, min(36vh, 27vw))'
+    : 'max(7rem, min(30vh, 22vw))';
   const digitFontSize = isFullscreen
-    ? 'clamp(4rem, 10vw, 8rem)'
-    : 'clamp(3.5rem, 8.5vw, 7rem)';
+    ? 'max(4.5rem, min(20vh, 15vw))'
+    : 'max(3.8rem, min(17vh, 13vw))';
   const colonDotSize = isFullscreen
-    ? 'clamp(0.6rem, 1.2vw, 1rem)'
-    : 'clamp(0.5rem, 1vw, 0.8rem)';
+    ? 'max(0.6rem, min(1.6vh, 1.2vw))'
+    : 'max(0.5rem, min(1.3vh, 1vw))';
+  const cardGap = isFullscreen
+    ? 'max(0.75rem, min(2.2vh, 1.6vw))'
+    : 'max(0.6rem, min(1.8vh, 1.4vw))';
+  const colonMargin = isFullscreen
+    ? 'max(0.75rem, min(2.5vh, 1.8vw))'
+    : 'max(0.6rem, min(2vh, 1.5vw))';
 
   const cardBg = '#1c1b19';
   const textColor = '#f5f0e8';
@@ -110,17 +110,13 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
 
   const TopContent = ({ d }: { d: string }) => (
     <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
-      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(50%)' }}>
-        {d}
-      </div>
+      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(50%)' }}>{d}</div>
     </div>
   );
 
   const BottomContent = ({ d }: { d: string }) => (
     <div className="absolute inset-0 flex items-start justify-center overflow-hidden">
-      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(-50%)' }}>
-        {d}
-      </div>
+      <div className="font-bold" style={{ ...digitStyle, transform: 'translateY(-50%)' }}>{d}</div>
     </div>
   );
 
@@ -133,86 +129,45 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
     const showFlip = isFlipping && oldDigit !== undefined && newDigit !== undefined;
 
     return (
-      <div className="relative" style={{
-        ...digitSizeStyle,
+      <div className="relative flex-shrink-0" style={{
+        height: cardHeight,
+        aspectRatio: '3 / 4',
         perspective: '600px',
         borderRadius: '0.375rem',
         boxShadow: '0 18px 40px -6px rgba(0,0,0,0.65), 0 6px 14px -4px rgba(0,0,0,0.45)',
       }}>
         {showFlip ? (
           <>
-            {/* Layer 1: full static old card (background) */}
             <div className="absolute inset-0 rounded-md" style={{ background: cardBg, zIndex: 0 }}>
-              <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
-                <TopContent d={oldDigit} />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
-                <BottomContent d={oldDigit} />
-              </div>
+              <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden"><TopContent d={oldDigit} /></div>
+              <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden"><BottomContent d={oldDigit} /></div>
             </div>
-
-            {/* Layer 2: static new top half (revealed as flip-top rotates away) */}
             <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden" style={{ background: cardBg, zIndex: 1 }}>
               <TopContent d={newDigit} />
             </div>
-
-            {/* Layer 3: flip-top — old top half rotates 0° → -90° (ease-in, falls forward) */}
-            <div
-              className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden"
-              style={{
-                background: cardBg,
-                zIndex: 2,
-                transformOrigin: 'center bottom',
-                animation: 'flipTopDown 185ms cubic-bezier(0.55, 0, 1, 0.45) forwards',
-              }}
-            >
+            <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden" style={{
+              background: cardBg, zIndex: 2, transformOrigin: 'center bottom',
+              animation: 'flipTopDown 185ms cubic-bezier(0.55, 0, 1, 0.45) forwards',
+            }}>
               <TopContent d={oldDigit} />
-              <div
-                className="absolute inset-0 bg-black"
-                style={{ animation: 'foldShadowIn 185ms ease-in forwards', opacity: 0 }}
-              />
+              <div className="absolute inset-0 bg-black" style={{ animation: 'foldShadowIn 185ms ease-in forwards', opacity: 0 }} />
             </div>
-
-            {/* Layer 4: flip-bottom — new bottom half rotates 90° → 0° with delay (ease-out, falls into place) */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden"
-              style={{
-                background: cardBg,
-                zIndex: 2,
-                transformOrigin: 'center top',
-                animation: 'flipBottomUp 185ms cubic-bezier(0, 0.55, 0.45, 1) 185ms both',
-              }}
-            >
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden" style={{
+              background: cardBg, zIndex: 2, transformOrigin: 'center top',
+              animation: 'flipBottomUp 185ms cubic-bezier(0, 0.55, 0.45, 1) 185ms both',
+            }}>
               <BottomContent d={newDigit} />
-              <div
-                className="absolute inset-0 bg-black"
-                style={{ animation: 'foldShadowOut 185ms ease-out 185ms both', opacity: 0.25 }}
-              />
+              <div className="absolute inset-0 bg-black" style={{ animation: 'foldShadowOut 185ms ease-out 185ms both', opacity: 0.25 }} />
             </div>
           </>
         ) : (
-          /* Static card */
           <div className="absolute inset-0 rounded-md" style={{ background: cardBg, zIndex: 0 }}>
-            <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
-              <TopContent d={digit} />
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
-              <BottomContent d={digit} />
-            </div>
+            <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden"><TopContent d={digit} /></div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden"><BottomContent d={digit} /></div>
           </div>
         )}
-
-        {/* Border frame — always on top */}
-        <div
-          className="absolute inset-0 rounded-md pointer-events-none"
-          style={{ border: `1px solid ${borderColor}`, zIndex: 5 }}
-        />
-
-        {/* Center divider line — always on top */}
-        <div
-          className="absolute left-0 right-0 pointer-events-none"
-          style={{ top: '50%', height: '1px', background: centerLineColor, zIndex: 5 }}
-        />
+        <div className="absolute inset-0 rounded-md pointer-events-none" style={{ border: `1px solid ${borderColor}`, zIndex: 5 }} />
+        <div className="absolute left-0 right-0 pointer-events-none" style={{ top: '50%', height: '1px', background: centerLineColor, zIndex: 5 }} />
       </div>
     );
   };
@@ -220,24 +175,12 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
   return (
     <>
       <style jsx>{`
-        @keyframes flipTopDown {
-          from { transform: rotateX(0deg); }
-          to   { transform: rotateX(-90deg); }
-        }
-        @keyframes flipBottomUp {
-          from { transform: rotateX(90deg); }
-          to   { transform: rotateX(0deg); }
-        }
-        @keyframes foldShadowIn {
-          from { opacity: 0; }
-          to   { opacity: 0.25; }
-        }
-        @keyframes foldShadowOut {
-          from { opacity: 0.25; }
-          to   { opacity: 0; }
-        }
+        @keyframes flipTopDown { from { transform: rotateX(0deg); } to { transform: rotateX(-90deg); } }
+        @keyframes flipBottomUp { from { transform: rotateX(90deg); } to { transform: rotateX(0deg); } }
+        @keyframes foldShadowIn { from { opacity: 0; } to { opacity: 0.25; } }
+        @keyframes foldShadowOut { from { opacity: 0.25; } to { opacity: 0; } }
       `}</style>
-      <div className="flex items-center justify-center gap-3 sm:gap-5 md:gap-6">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: cardGap }}>
         {minuteDigits.map((digit, index) => (
           <FlipDigit
             key={`min-${index}`}
@@ -248,8 +191,7 @@ export default function FlippingClock({ timeLeft, isFullscreen = false }: Flippi
           />
         ))}
 
-        {/* Colon */}
-        <div className="flex flex-col items-center gap-2 mx-3 sm:mx-4 md:mx-5">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5vh', margin: `0 ${colonMargin}` }}>
           <div className="rounded-full" style={{ width: colonDotSize, height: colonDotSize, background: '#f5f0e8' }} />
           <div className="rounded-full" style={{ width: colonDotSize, height: colonDotSize, background: '#f5f0e8' }} />
         </div>
